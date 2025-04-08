@@ -3,20 +3,17 @@ package app
 
 import (
 	"fmt"
-	"os"
-	"os/signal"
-	"syscall"
 
-	"github.com/evrone/go-clean-template/config"
-	amqprpc "github.com/evrone/go-clean-template/internal/controller/amqp_rpc"
-	v1 "github.com/evrone/go-clean-template/internal/controller/http"
-	"github.com/evrone/go-clean-template/internal/repo/persistent"
-	"github.com/evrone/go-clean-template/internal/repo/webapi"
-	"github.com/evrone/go-clean-template/internal/usecase/translation"
-	"github.com/evrone/go-clean-template/pkg/httpserver"
-	"github.com/evrone/go-clean-template/pkg/logger"
-	"github.com/evrone/go-clean-template/pkg/postgres"
-	"github.com/evrone/go-clean-template/pkg/rabbitmq/rmq_rpc/server"
+	//amqprpc "github.com/evrone/go-clean-template/internal/controller/amqp_rpc"
+	//v1 "github.com/evrone/go-clean-template/internal/controller/http"
+	//"github.com/evrone/go-clean-template/pkg/httpserver"
+	//"github.com/evrone/go-clean-template/pkg/rabbitmq/rmq_rpc/server"
+
+	"homework_crud/config"
+	"homework_crud/internal/repo/persistent"
+	"homework_crud/internal/usecase/user"
+	"homework_crud/pkg/logger"
+	"homework_crud/pkg/postgres"
 )
 
 // Run creates objects via constructors.
@@ -31,48 +28,46 @@ func Run(cfg *config.Config) {
 	defer pg.Close()
 
 	// Use case
-	translationUseCase := translation.New(
-		persistent.New(pg),
-		webapi.New(),
-	)
+	userUserCase := user.New(persistent.New(pg))
 
+	fmt.Printf("%#v \n", userUserCase)
 	// RabbitMQ RPC Server
-	rmqRouter := amqprpc.NewRouter(translationUseCase)
+	//rmqRouter := amqprpc.NewRouter(translationUseCase)
 
-	rmqServer, err := server.New(cfg.RMQ.URL, cfg.RMQ.ServerExchange, rmqRouter, l)
-	if err != nil {
-		l.Fatal(fmt.Errorf("app - Run - rmqServer - server.New: %w", err))
-	}
-
-	// HTTP Server
-	httpServer := httpserver.New(httpserver.Port(cfg.HTTP.Port), httpserver.Prefork(cfg.HTTP.UsePreforkMode))
-	v1.NewRouter(httpServer.App, cfg, l, translationUseCase)
-
-	// Start servers
-	rmqServer.Start()
-	httpServer.Start()
-
-	// Waiting signal
-	interrupt := make(chan os.Signal, 1)
-	signal.Notify(interrupt, os.Interrupt, syscall.SIGTERM)
-
-	select {
-	case s := <-interrupt:
-		l.Info("app - Run - signal: " + s.String())
-	case err = <-httpServer.Notify():
-		l.Error(fmt.Errorf("app - Run - httpServer.Notify: %w", err))
-	case err = <-rmqServer.Notify():
-		l.Error(fmt.Errorf("app - Run - rmqServer.Notify: %w", err))
-	}
-
-	// Shutdown
-	err = httpServer.Shutdown()
-	if err != nil {
-		l.Error(fmt.Errorf("app - Run - httpServer.Shutdown: %w", err))
-	}
-
-	err = rmqServer.Shutdown()
-	if err != nil {
-		l.Error(fmt.Errorf("app - Run - rmqServer.Shutdown: %w", err))
-	}
+	//rmqServer, err := server.New(cfg.RMQ.URL, cfg.RMQ.ServerExchange, rmqRouter, l)
+	//if err != nil {
+	//	l.Fatal(fmt.Errorf("app - Run - rmqServer - server.New: %w", err))
+	//}
+	//
+	//// HTTP Server
+	//httpServer := httpserver.New(httpserver.Port(cfg.HTTP.Port), httpserver.Prefork(cfg.HTTP.UsePreforkMode))
+	//v1.NewRouter(httpServer.App, cfg, l, translationUseCase)
+	//
+	//// Start servers
+	//rmqServer.Start()
+	//httpServer.Start()
+	//
+	//// Waiting signal
+	//interrupt := make(chan os.Signal, 1)
+	//signal.Notify(interrupt, os.Interrupt, syscall.SIGTERM)
+	//
+	//select {
+	//case s := <-interrupt:
+	//	l.Info("app - Run - signal: " + s.String())
+	//case err = <-httpServer.Notify():
+	//	l.Error(fmt.Errorf("app - Run - httpServer.Notify: %w", err))
+	//case err = <-rmqServer.Notify():
+	//	l.Error(fmt.Errorf("app - Run - rmqServer.Notify: %w", err))
+	//}
+	//
+	//// Shutdown
+	//err = httpServer.Shutdown()
+	//if err != nil {
+	//	l.Error(fmt.Errorf("app - Run - httpServer.Shutdown: %w", err))
+	//}
+	//
+	//err = rmqServer.Shutdown()
+	//if err != nil {
+	//	l.Error(fmt.Errorf("app - Run - rmqServer.Shutdown: %w", err))
+	//}
 }

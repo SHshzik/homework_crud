@@ -10,9 +10,8 @@ import (
 	"os"
 	"testing"
 	"time"
-
-	"github.com/evrone/go-clean-template/pkg/rabbitmq/rmq_rpc/client"
-	"github.com/goccy/go-json"
+	//"github.com/evrone/go-clean-template/pkg/rabbitmq/rmq_rpc/client"
+	//"github.com/goccy/go-json"
 )
 
 const (

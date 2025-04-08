@@ -4,11 +4,10 @@ import (
 	"context"
 	"errors"
 	"testing"
-
-	"github.com/evrone/go-clean-template/internal/entity"
-	"github.com/evrone/go-clean-template/internal/usecase/translation"
-	"github.com/stretchr/testify/require"
-	"go.uber.org/mock/gomock"
+	//"github.com/evrone/go-clean-template/internal/entity"
+	//"github.com/evrone/go-clean-template/internal/usecase/translation"
+	//"github.com/stretchr/testify/require"
+	//"go.uber.org/mock/gomock"
 )
 
 var errInternalServErr = errors.New("internal server error")

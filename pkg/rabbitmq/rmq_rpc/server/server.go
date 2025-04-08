@@ -1,13 +1,15 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
+	"homework_crud/pkg/logger"
+	rmqrpc "homework_crud/pkg/rabbitmq/rmq_rpc"
 	"time"
-
-	"github.com/evrone/go-clean-template/pkg/logger"
-	rmqrpc "github.com/evrone/go-clean-template/pkg/rabbitmq/rmq_rpc"
-	"github.com/goccy/go-json"
-	amqp "github.com/rabbitmq/amqp091-go"
+	//"github.com/evrone/go-clean-template/pkg/logger"
+	//rmqrpc "github.com/evrone/go-clean-template/pkg/rabbitmq/rmq_rpc"
+	//"github.com/goccy/go-json"
+	//amqp "github.com/rabbitmq/amqp091-go"
 )
 
 const (

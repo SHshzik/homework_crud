@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/evrone/go-clean-template/internal/app"
 	"homework_crud/config"
+	"homework_crud/internal/app"
 )
 
 func main() {

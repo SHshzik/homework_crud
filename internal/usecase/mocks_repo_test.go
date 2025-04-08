@@ -13,8 +13,8 @@ import (
 	context "context"
 	reflect "reflect"
 
-	entity "github.com/evrone/go-clean-template/internal/entity"
-	gomock "go.uber.org/mock/gomock"
+	//entity "github.com/evrone/go-clean-template/internal/entity"
+	//gomock "go.uber.org/mock/gomock"
 )
 
 // MockTranslationRepo is a mock of TranslationRepo interface.
