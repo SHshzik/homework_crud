@@ -1,4 +1,4 @@
-module github.com/evrone/go-clean-template
+module homework_crud
 
 go 1.23
 
