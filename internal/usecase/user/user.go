@@ -1,6 +1,8 @@
 package user
 
 import (
+	"context"
+	"homework_crud/internal/entity"
 	"homework_crud/internal/repo"
 )
 
@@ -12,6 +14,34 @@ type UseCase struct {
 // New -.
 func New(r repo.UserRepo) *UseCase {
 	return &UseCase{repo: r}
+}
+
+func (u *UseCase) ReadAll(ctx context.Context) ([]entity.User, error) {
+	users, err := u.repo.FetchAll(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
+}
+
+func (u *UseCase) Create() {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (u *UseCase) Read() {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (u *UseCase) Update() {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (u *UseCase) Delete() {
+	//TODO implement me
+	panic("implement me")
 }
 
 // History - getting translate history from store.

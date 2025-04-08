@@ -3,15 +3,19 @@ package app
 
 import (
 	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
 
 	//amqprpc "github.com/evrone/go-clean-template/internal/controller/amqp_rpc"
-	//v1 "github.com/evrone/go-clean-template/internal/controller/http"
 	//"github.com/evrone/go-clean-template/pkg/httpserver"
 	//"github.com/evrone/go-clean-template/pkg/rabbitmq/rmq_rpc/server"
 
 	"homework_crud/config"
+	v1 "homework_crud/internal/controller/http"
 	"homework_crud/internal/repo/persistent"
 	"homework_crud/internal/usecase/user"
+	"homework_crud/pkg/httpserver"
 	"homework_crud/pkg/logger"
 	"homework_crud/pkg/postgres"
 )
@@ -30,7 +34,6 @@ func Run(cfg *config.Config) {
 	// Use case
 	userUserCase := user.New(persistent.New(pg))
 
-	fmt.Printf("%#v \n", userUserCase)
 	// RabbitMQ RPC Server
 	//rmqRouter := amqprpc.NewRouter(translationUseCase)
 
@@ -38,33 +41,33 @@ func Run(cfg *config.Config) {
 	//if err != nil {
 	//	l.Fatal(fmt.Errorf("app - Run - rmqServer - server.New: %w", err))
 	//}
-	//
-	//// HTTP Server
-	//httpServer := httpserver.New(httpserver.Port(cfg.HTTP.Port), httpserver.Prefork(cfg.HTTP.UsePreforkMode))
-	//v1.NewRouter(httpServer.App, cfg, l, translationUseCase)
-	//
+
+	// HTTP Server
+	httpServer := httpserver.New(httpserver.Port(cfg.HTTP.Port), httpserver.Prefork(cfg.HTTP.UsePreforkMode))
+	v1.NewRouter(httpServer.App, cfg, l, userUserCase)
+
 	//// Start servers
 	//rmqServer.Start()
-	//httpServer.Start()
-	//
-	//// Waiting signal
-	//interrupt := make(chan os.Signal, 1)
-	//signal.Notify(interrupt, os.Interrupt, syscall.SIGTERM)
-	//
-	//select {
-	//case s := <-interrupt:
-	//	l.Info("app - Run - signal: " + s.String())
-	//case err = <-httpServer.Notify():
-	//	l.Error(fmt.Errorf("app - Run - httpServer.Notify: %w", err))
-	//case err = <-rmqServer.Notify():
-	//	l.Error(fmt.Errorf("app - Run - rmqServer.Notify: %w", err))
-	//}
-	//
-	//// Shutdown
-	//err = httpServer.Shutdown()
-	//if err != nil {
-	//	l.Error(fmt.Errorf("app - Run - httpServer.Shutdown: %w", err))
-	//}
+	httpServer.Start()
+
+	// Waiting signal
+	interrupt := make(chan os.Signal, 1)
+	signal.Notify(interrupt, os.Interrupt, syscall.SIGTERM)
+
+	select {
+	case s := <-interrupt:
+		l.Info("app - Run - signal: " + s.String())
+	case err = <-httpServer.Notify():
+		l.Error(fmt.Errorf("app - Run - httpServer.Notify: %w", err))
+		//case err = <-rmqServer.Notify():
+		//	l.Error(fmt.Errorf("app - Run - rmqServer.Notify: %w", err))
+	}
+
+	// Shutdown
+	err = httpServer.Shutdown()
+	if err != nil {
+		l.Error(fmt.Errorf("app - Run - httpServer.Shutdown: %w", err))
+	}
 	//
 	//err = rmqServer.Shutdown()
 	//if err != nil {
