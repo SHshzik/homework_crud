@@ -5,6 +5,7 @@ import (
 	"homework_crud/internal/usecase"
 	"homework_crud/pkg/logger"
 	"net/http"
+	"strconv"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
@@ -22,7 +23,7 @@ func NewUserRoutes(apiV1Group fiber.Router, t usecase.User, l logger.Interface) 
 	translationGroup := apiV1Group.Group("/users")
 	{
 		translationGroup.Get("/", r.index)
-		//translationGroup.Post("/do-translate", r.doTranslate)
+		translationGroup.Get("/:user_id", r.show)
 	}
 }
 
@@ -48,4 +49,35 @@ func (r *userRoutes) index(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.Status(http.StatusOK).JSON(indexResponse{users})
+}
+
+type userResponse struct {
+	*entity.User
+}
+
+// @Summary     Show user by id
+// @Description Show user detail
+// @ID          show
+// @Tags  	    users
+// @Accept      json
+// @Produce     json
+// @Success     200 {object} userResponse
+// @Failure     500 {object} response
+// @Router      /users/:id [get]
+func (r *userRoutes) show(ctx *fiber.Ctx) error {
+	userId, err := strconv.Atoi(ctx.Params("user_id"))
+	if err != nil {
+		r.l.Error(err, "http - v1 - show")
+
+		return errorResponse(ctx, http.StatusUnprocessableEntity, "wrong user id")
+	}
+
+	user, err := r.t.Read(ctx.UserContext(), userId)
+	if err != nil {
+		r.l.Error(err, "http - v1 - index")
+
+		return errorResponse(ctx, http.StatusNotFound, "user not found")
+	}
+
+	return ctx.Status(http.StatusOK).JSON(userResponse{user})
 }

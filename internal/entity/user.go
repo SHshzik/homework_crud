@@ -4,7 +4,7 @@ package entity
 
 // User -.
 type User struct {
-	Name  string `json:"source" example:"Andrey"`
+	Name  string `json:"name"  example:"Andrey"`
 	Email string `json:"email" example:"test@test.com"`
 	Phone string `json:"phone" example:"+79999999999"`
 }

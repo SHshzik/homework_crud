@@ -32,7 +32,7 @@ func Run(cfg *config.Config) {
 	defer pg.Close()
 
 	// Use case
-	userUserCase := user.New(persistent.New(pg))
+	userUseCase := user.New(persistent.New(pg))
 
 	// RabbitMQ RPC Server
 	//rmqRouter := amqprpc.NewRouter(translationUseCase)
@@ -44,7 +44,7 @@ func Run(cfg *config.Config) {
 
 	// HTTP Server
 	httpServer := httpserver.New(httpserver.Port(cfg.HTTP.Port), httpserver.Prefork(cfg.HTTP.UsePreforkMode))
-	v1.NewRouter(httpServer.App, cfg, l, userUserCase)
+	v1.NewRouter(httpServer.App, cfg, l, userUseCase)
 
 	//// Start servers
 	//rmqServer.Start()

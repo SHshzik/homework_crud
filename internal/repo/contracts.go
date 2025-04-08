@@ -11,5 +11,6 @@ import (
 type (
 	UserRepo interface {
 		FetchAll(ctx context.Context) ([]entity.User, error)
+		Find(ctx context.Context, id int) (*entity.User, error)
 	}
 )

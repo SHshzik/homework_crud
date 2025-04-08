@@ -29,9 +29,12 @@ func (u *UseCase) Create() {
 	panic("implement me")
 }
 
-func (u *UseCase) Read() {
-	//TODO implement me
-	panic("implement me")
+func (u *UseCase) Read(ctx context.Context, id int) (*entity.User, error) {
+	user, err := u.repo.Find(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
 }
 
 func (u *UseCase) Update() {

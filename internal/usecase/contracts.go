@@ -13,7 +13,7 @@ type (
 	User interface {
 		ReadAll(ctx context.Context) ([]entity.User, error)
 		Create()
-		Read()
+		Read(ctx context.Context, id int) (*entity.User, error)
 		Update()
 		Delete()
 
