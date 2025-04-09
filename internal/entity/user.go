@@ -4,6 +4,7 @@ package entity
 
 // User -.
 type User struct {
+	Id    int    `json:"id"  example:"Andrey"`
 	Name  string `json:"name"  example:"Andrey"`
 	Email string `json:"email" example:"test@test.com"`
 	Phone string `json:"phone" example:"+79999999999"`

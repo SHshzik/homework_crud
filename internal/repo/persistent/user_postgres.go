@@ -21,7 +21,7 @@ func New(pg *postgres.Postgres) *UserRepo {
 
 func (r UserRepo) FetchAll(ctx context.Context) ([]entity.User, error) {
 	sql, _, err := r.Builder.
-		Select("name, email, phone").
+		Select("id, name, email, phone").
 		From("users").
 		ToSql()
 	if err != nil {
@@ -37,7 +37,7 @@ func (r UserRepo) FetchAll(ctx context.Context) ([]entity.User, error) {
 	for rows.Next() {
 		e := entity.User{}
 
-		err = rows.Scan(&e.Name, &e.Email, &e.Phone)
+		err = rows.Scan(&e.Id, &e.Name, &e.Email, &e.Phone)
 		if err != nil {
 			return nil, fmt.Errorf("UserRepo - FetchAll - rows.Scan: %w", err)
 		}
@@ -50,7 +50,7 @@ func (r UserRepo) FetchAll(ctx context.Context) ([]entity.User, error) {
 
 func (r UserRepo) Find(ctx context.Context, id int) (*entity.User, error) {
 	sql, _, err := r.Builder.
-		Select("name, email, phone").
+		Select("id, name, email, phone").
 		From("users").
 		Where("id = $1").
 		ToSql()
@@ -58,7 +58,7 @@ func (r UserRepo) Find(ctx context.Context, id int) (*entity.User, error) {
 		return nil, fmt.Errorf("UserRepo - Find - r.Builder: %w", err)
 	}
 	user := &entity.User{}
-	err = r.Pool.QueryRow(ctx, sql, id).Scan(&user.Name, &user.Email, &user.Phone)
+	err = r.Pool.QueryRow(ctx, sql, id).Scan(&user.Id, &user.Name, &user.Email, &user.Phone)
 	if err != nil {
 		return nil, fmt.Errorf("UserRepo - Find - r.Pool.Query: %w", err)
 	}
