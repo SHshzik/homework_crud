@@ -10,6 +10,7 @@ require (
 	github.com/gofiber/fiber/v2 v2.52.6
 	github.com/gofiber/swagger v1.1.1
 	github.com/golang-migrate/migrate/v4 v4.18.2
+	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.7.4
 	github.com/rabbitmq/amqp091-go v1.10.0
 	github.com/rs/zerolog v1.34.0
@@ -28,7 +29,6 @@ require (
 	github.com/go-openapi/swag v0.19.15 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect

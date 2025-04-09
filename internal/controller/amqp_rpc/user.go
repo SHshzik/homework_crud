@@ -1,38 +1,36 @@
 package amqprpc
 
 import (
-	"context"
-	"fmt"
-	//"github.com/evrone/go-clean-template/internal/entity"
-	//"github.com/evrone/go-clean-template/internal/usecase"
-	//"github.com/evrone/go-clean-template/pkg/rabbitmq/rmq_rpc/server"
-	//amqp "github.com/rabbitmq/amqp091-go"
+	amqp "github.com/rabbitmq/amqp091-go"
+	"homework_crud/internal/entity"
+	"homework_crud/internal/usecase"
+	"homework_crud/pkg/rabbitmq/rmq_rpc/server"
 )
 
-type translationRoutes struct {
-	translationUseCase usecase.Translation
+type userRoutes struct {
+	userUseCase usecase.User
 }
 
-func newTranslationRoutes(routes map[string]server.CallHandler, t usecase.Translation) {
-	r := &translationRoutes{t}
+func newUserRoutes(routes map[string]server.CallHandler, t usecase.User) {
+	r := &userRoutes{t}
 	{
-		routes["getHistory"] = r.getHistory()
+		routes["index"] = r.getHistory()
 	}
 }
 
 type historyResponse struct {
-	History []entity.Translation `json:"history"`
+	History []entity.User `json:"history"`
 }
 
-func (r *translationRoutes) getHistory() server.CallHandler {
-	return func(_ *amqp.Delivery) (interface{}, error) {
-		translations, err := r.translationUseCase.History(context.Background())
-		if err != nil {
-			return nil, fmt.Errorf("amqp_rpc - translationRoutes - getHistory - r.translationUseCase.History: %w", err)
-		}
+func (r *userRoutes) getHistory() server.CallHandler {
+	return func(_ *amqp.Delivery) (any, error) {
+		//translations, err := r.userUseCase.History(context.Background())
+		//if err != nil {
+		//	return nil, fmt.Errorf("amqp_rpc - translationRoutes - getHistory - r.translationUseCase.History: %w", err)
+		//}
+		//
+		//response := historyResponse{translations}
 
-		response := historyResponse{translations}
-
-		return response, nil
+		return nil, nil
 	}
 }
