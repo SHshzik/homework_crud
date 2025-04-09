@@ -20,13 +20,13 @@ type userRoutes struct {
 func NewUserRoutes(apiV1Group fiber.Router, t usecase.User, l logger.Interface) {
 	r := &userRoutes{t, l, validator.New(validator.WithRequiredStructEnabled())}
 
-	translationGroup := apiV1Group.Group("/users")
+	userGroup := apiV1Group.Group("/users")
 	{
-		translationGroup.Get("/", r.index)
-		translationGroup.Put("/:user_id", r.update)
-		translationGroup.Post("/", r.create)
-		translationGroup.Get("/:user_id", r.show)
-		translationGroup.Delete("/:user_id", r.delete)
+		userGroup.Get("/", r.index)
+		userGroup.Put("/:user_id", r.update)
+		userGroup.Post("/", r.create)
+		userGroup.Get("/:user_id", r.show)
+		userGroup.Delete("/:user_id", r.delete)
 	}
 }
 

@@ -3,12 +3,12 @@ package client
 import (
 	"errors"
 	"fmt"
+	"github.com/goccy/go-json"
+	"github.com/google/uuid"
+	amqp "github.com/rabbitmq/amqp091-go"
+	rmqrpc "homework_crud/pkg/rabbitmq/rmq_rpc"
 	"sync"
 	"time"
-	//rmqrpc "github.com/evrone/go-clean-template/pkg/rabbitmq/rmq_rpc"
-	//"github.com/goccy/go-json"
-	//"github.com/google/uuid"
-	//amqp "github.com/rabbitmq/amqp091-go"
 )
 
 // ErrConnectionClosed -.

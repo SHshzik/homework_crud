@@ -3,21 +3,18 @@ package app
 
 import (
 	"fmt"
-	"os"
-	"os/signal"
-	"syscall"
-
-	//amqprpc "github.com/evrone/go-clean-template/internal/controller/amqp_rpc"
-	//"github.com/evrone/go-clean-template/pkg/httpserver"
-	//"github.com/evrone/go-clean-template/pkg/rabbitmq/rmq_rpc/server"
-
 	"homework_crud/config"
+	amqprpc "homework_crud/internal/controller/amqp_rpc"
 	v1 "homework_crud/internal/controller/http"
 	"homework_crud/internal/repo/persistent"
 	"homework_crud/internal/usecase/user"
 	"homework_crud/pkg/httpserver"
 	"homework_crud/pkg/logger"
 	"homework_crud/pkg/postgres"
+	"homework_crud/pkg/rabbitmq/rmq_rpc/server"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 // Run creates objects via constructors.
@@ -35,19 +32,19 @@ func Run(cfg *config.Config) {
 	userUseCase := user.New(persistent.New(pg))
 
 	// RabbitMQ RPC Server
-	//rmqRouter := amqprpc.NewRouter(translationUseCase)
+	rmqRouter := amqprpc.NewRouter(userUseCase)
 
-	//rmqServer, err := server.New(cfg.RMQ.URL, cfg.RMQ.ServerExchange, rmqRouter, l)
-	//if err != nil {
-	//	l.Fatal(fmt.Errorf("app - Run - rmqServer - server.New: %w", err))
-	//}
+	rmqServer, err := server.New(cfg.RMQ.URL, cfg.RMQ.ServerExchange, rmqRouter, l)
+	if err != nil {
+		l.Fatal(fmt.Errorf("app - Run - rmqServer - server.New: %w", err))
+	}
 
 	// HTTP Server
 	httpServer := httpserver.New(httpserver.Port(cfg.HTTP.Port), httpserver.Prefork(cfg.HTTP.UsePreforkMode))
 	v1.NewRouter(httpServer.App, cfg, l, userUseCase)
 
 	//// Start servers
-	//rmqServer.Start()
+	rmqServer.Start()
 	httpServer.Start()
 
 	// Waiting signal
@@ -59,8 +56,8 @@ func Run(cfg *config.Config) {
 		l.Info("app - Run - signal: " + s.String())
 	case err = <-httpServer.Notify():
 		l.Error(fmt.Errorf("app - Run - httpServer.Notify: %w", err))
-		//case err = <-rmqServer.Notify():
-		//	l.Error(fmt.Errorf("app - Run - rmqServer.Notify: %w", err))
+	case err = <-rmqServer.Notify():
+		l.Error(fmt.Errorf("app - Run - rmqServer.Notify: %w", err))
 	}
 
 	// Shutdown
@@ -68,9 +65,9 @@ func Run(cfg *config.Config) {
 	if err != nil {
 		l.Error(fmt.Errorf("app - Run - httpServer.Shutdown: %w", err))
 	}
-	//
-	//err = rmqServer.Shutdown()
-	//if err != nil {
-	//	l.Error(fmt.Errorf("app - Run - rmqServer.Shutdown: %w", err))
-	//}
+
+	err = rmqServer.Shutdown()
+	if err != nil {
+		l.Error(fmt.Errorf("app - Run - rmqServer.Shutdown: %w", err))
+	}
 }
