@@ -23,9 +23,10 @@ func NewUserRoutes(apiV1Group fiber.Router, t usecase.User, l logger.Interface) 
 	translationGroup := apiV1Group.Group("/users")
 	{
 		translationGroup.Get("/", r.index)
+		translationGroup.Put("/:user_id", r.update)
+		translationGroup.Post("/", r.create)
 		translationGroup.Get("/:user_id", r.show)
 		translationGroup.Delete("/:user_id", r.delete)
-		translationGroup.Post("/", r.create)
 	}
 }
 
@@ -149,6 +150,51 @@ func (r *userRoutes) create(ctx *fiber.Ctx) error {
 		r.l.Error(err, "http - v1 - create")
 
 		return errorResponse(ctx, http.StatusUnprocessableEntity, "user not created")
+	}
+
+	return ctx.Status(http.StatusCreated).JSON(userResponse{user})
+}
+
+// @Summary     Update user
+// @Description Update exists user
+// @ID          update
+// @Tags  	    users
+// @Accept      json
+// @Produce     json
+// @Success     200 {object} userResponse
+// @Failure     500 {object} response
+// @Router      /users [put]
+func (r *userRoutes) update(ctx *fiber.Ctx) error {
+	userId, err := strconv.Atoi(ctx.Params("user_id"))
+	if err != nil {
+		r.l.Error(err, "http - v1 - delete")
+
+		return errorResponse(ctx, http.StatusUnprocessableEntity, "wrong user id")
+	}
+
+	formUser := userForm{}
+	err = ctx.BodyParser(&formUser)
+	if err != nil {
+		r.l.Error(err, "http - v1 - update")
+
+		return errorResponse(ctx, http.StatusUnprocessableEntity, "Bad user params")
+	}
+
+	err = r.v.Struct(formUser)
+	if err != nil {
+		r.l.Error(err, "http - v1 - update")
+
+		return errorResponse(ctx, http.StatusUnprocessableEntity, err.Error())
+	}
+
+	user := entity.NewUser(formUser.Name, formUser.Email, formUser.Phone)
+	user.Id = userId
+
+	err = r.t.Update(ctx.UserContext(), user)
+	if err != nil {
+		r.l.Error(err, "http - v1 - update")
+
+		return errorResponse(ctx, http.StatusUnprocessableEntity, "user not updated")
 	}
 
 	return ctx.Status(http.StatusCreated).JSON(userResponse{user})

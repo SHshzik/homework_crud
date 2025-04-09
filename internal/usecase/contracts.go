@@ -14,7 +14,7 @@ type (
 		ReadAll(ctx context.Context) ([]entity.User, error)
 		Create(ctx context.Context, user *entity.User) error
 		Read(ctx context.Context, id int) (*entity.User, error)
-		Update()
+		Update(ctx context.Context, user *entity.User) error
 		Delete(ctx context.Context, id int) error
 	}
 )

@@ -100,3 +100,23 @@ func (r UserRepo) Create(ctx context.Context, user *entity.User) error {
 	}
 	return nil
 }
+
+func (r UserRepo) Update(ctx context.Context, user *entity.User) error {
+	sql, _, err := r.Builder.
+		Update("users").
+		Set("name", "$1").
+		Set("email", "$2").
+		Set("phone", "$3").
+		Where("id = $4").
+		Suffix("returning id").
+		ToSql()
+	if err != nil {
+		return fmt.Errorf("UserRepo - Update - r.Builder: %w", err)
+	}
+
+	err = r.Pool.QueryRow(ctx, sql, user.Name, user.Email, user.Phone, user.Id).Scan(&user.Id)
+	if err != nil {
+		return fmt.Errorf("UserRepo - Update - r.Pool.Exec %w", err)
+	}
+	return nil
+}
