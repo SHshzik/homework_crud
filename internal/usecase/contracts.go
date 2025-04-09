@@ -15,9 +15,6 @@ type (
 		Create()
 		Read(ctx context.Context, id int) (*entity.User, error)
 		Update()
-		Delete()
-
-		//Translate(context.Context, entity.Translation) (entity.Translation, error)
-		//History(context.Context) ([]entity.Translation, error)
+		Delete(ctx context.Context, id int) error
 	}
 )

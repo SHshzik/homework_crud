@@ -42,9 +42,13 @@ func (u *UseCase) Update() {
 	panic("implement me")
 }
 
-func (u *UseCase) Delete() {
-	//TODO implement me
-	panic("implement me")
+func (u *UseCase) Delete(ctx context.Context, id int) error {
+	err := u.repo.Delete(ctx, id)
+
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // History - getting translate history from store.

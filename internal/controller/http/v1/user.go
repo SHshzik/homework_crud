@@ -24,6 +24,7 @@ func NewUserRoutes(apiV1Group fiber.Router, t usecase.User, l logger.Interface) 
 	{
 		translationGroup.Get("/", r.index)
 		translationGroup.Get("/:user_id", r.show)
+		translationGroup.Delete("/:user_id", r.delete)
 	}
 }
 
@@ -80,4 +81,32 @@ func (r *userRoutes) show(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.Status(http.StatusOK).JSON(userResponse{user})
+}
+
+// @Summary     Delete user by id
+// @Description Delete user from db
+// @ID          delete
+// @Tags  	    users
+// @Accept      json
+// @Produce     json
+// @Success     204
+// @Failure     500 {object} response
+// @Router      /users/:id [delete]
+func (r *userRoutes) delete(ctx *fiber.Ctx) error {
+	userId, err := strconv.Atoi(ctx.Params("user_id"))
+	if err != nil {
+		r.l.Error(err, "http - v1 - delete")
+
+		return errorResponse(ctx, http.StatusUnprocessableEntity, "wrong user id")
+	}
+
+	err = r.t.Delete(ctx.UserContext(), userId)
+	if err != nil {
+		r.l.Error(err, "http - v1 - delete")
+
+		return errorResponse(ctx, http.StatusNotFound, "user not found")
+	}
+
+	ctx.Status(http.StatusNoContent)
+	return nil
 }

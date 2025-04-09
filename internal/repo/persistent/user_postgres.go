@@ -64,3 +64,21 @@ func (r UserRepo) Find(ctx context.Context, id int) (*entity.User, error) {
 	}
 	return user, nil
 }
+
+func (r UserRepo) Delete(ctx context.Context, id int) error {
+	var deletedId string
+
+	sql, _, err := r.Builder.
+		Delete("users").
+		Where("id = $1").
+		Suffix("returning id").
+		ToSql()
+	if err != nil {
+		return fmt.Errorf("UserRepo - Delete - r.Builder: %w", err)
+	}
+	err = r.Pool.QueryRow(ctx, sql, id).Scan(&deletedId)
+	if err != nil {
+		return fmt.Errorf("UserRepo - Delete - r.Pool.Exec %w", err)
+	}
+	return nil
+}
