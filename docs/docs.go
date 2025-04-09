@@ -15,9 +15,9 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/translation/do-translate": {
-            "post": {
-                "description": "Translate a text",
+        "/users": {
+            "get": {
+                "description": "Show all users",
                 "consumes": [
                     "application/json"
                 ],
@@ -25,32 +25,71 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "translation"
+                    "users"
                 ],
-                "summary": "Translate",
-                "operationId": "do-translate",
-                "parameters": [
-                    {
-                        "description": "Set up translation",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/v1.doTranslateRequest"
-                        }
-                    }
-                ],
+                "summary": "Show users",
+                "operationId": "index",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.Translation"
+                            "$ref": "#/definitions/v1.indexResponse"
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/v1.response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update exists user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Update user",
+                "operationId": "update",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1.userResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create new user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Create new user",
+                "operationId": "create",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/v1.userResponse"
                         }
                     },
                     "500": {
@@ -62,9 +101,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/translation/history": {
+        "/users/:id": {
             "get": {
-                "description": "Show all translation history",
+                "description": "Show user detail",
                 "consumes": [
                     "application/json"
                 ],
@@ -72,16 +111,41 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "translation"
+                    "users"
                 ],
-                "summary": "Show history",
-                "operationId": "history",
+                "summary": "Show user by id",
+                "operationId": "show",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/v1.historyResponse"
+                            "$ref": "#/definitions/v1.userResponse"
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete user from db",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Delete user by id",
+                "operationId": "delete",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
                     },
                     "500": {
                         "description": "Internal Server Error",
@@ -94,56 +158,34 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "entity.Translation": {
+        "entity.User": {
             "type": "object",
             "properties": {
-                "destination": {
+                "email": {
                     "type": "string",
-                    "example": "en"
+                    "example": "test@test.com"
                 },
-                "original": {
-                    "type": "string",
-                    "example": "текст для перевода"
+                "id": {
+                    "type": "integer",
+                    "example": 1
                 },
-                "source": {
+                "name": {
                     "type": "string",
-                    "example": "auto"
+                    "example": "Andrey"
                 },
-                "translation": {
+                "phone": {
                     "type": "string",
-                    "example": "text for translation"
+                    "example": "+79999999999"
                 }
             }
         },
-        "v1.doTranslateRequest": {
-            "type": "object",
-            "required": [
-                "destination",
-                "original",
-                "source"
-            ],
-            "properties": {
-                "destination": {
-                    "type": "string",
-                    "example": "en"
-                },
-                "original": {
-                    "type": "string",
-                    "example": "текст для перевода"
-                },
-                "source": {
-                    "type": "string",
-                    "example": "auto"
-                }
-            }
-        },
-        "v1.historyResponse": {
+        "v1.indexResponse": {
             "type": "object",
             "properties": {
-                "history": {
+                "users": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/entity.Translation"
+                        "$ref": "#/definitions/entity.User"
                     }
                 }
             }
@@ -156,6 +198,27 @@ const docTemplate = `{
                     "example": "message"
                 }
             }
+        },
+        "v1.userResponse": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "test@test.com"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Andrey"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "+79999999999"
+                }
+            }
         }
     }
 }`
@@ -166,8 +229,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8080",
 	BasePath:         "/v1",
 	Schemes:          []string{},
-	Title:            "Go Clean Template API",
-	Description:      "Using a translation service as an example",
+	Title:            "V1 API",
+	Description:      "User CRUD",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

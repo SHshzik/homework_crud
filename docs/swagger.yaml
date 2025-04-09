@@ -1,41 +1,25 @@
 basePath: /v1
 definitions:
-  entity.Translation:
+  entity.User:
     properties:
-      destination:
-        example: en
+      email:
+        example: test@test.com
         type: string
-      original:
-        example: текст для перевода
+      id:
+        example: 1
+        type: integer
+      name:
+        example: Andrey
         type: string
-      source:
-        example: auto
-        type: string
-      translation:
-        example: text for translation
+      phone:
+        example: "+79999999999"
         type: string
     type: object
-  v1.doTranslateRequest:
+  v1.indexResponse:
     properties:
-      destination:
-        example: en
-        type: string
-      original:
-        example: текст для перевода
-        type: string
-      source:
-        example: auto
-        type: string
-    required:
-    - destination
-    - original
-    - source
-    type: object
-  v1.historyResponse:
-    properties:
-      history:
+      users:
         items:
-          $ref: '#/definitions/entity.Translation'
+          $ref: '#/definitions/entity.User'
         type: array
     type: object
   v1.response:
@@ -44,62 +28,121 @@ definitions:
         example: message
         type: string
     type: object
+  v1.userResponse:
+    properties:
+      email:
+        example: test@test.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      name:
+        example: Andrey
+        type: string
+      phone:
+        example: "+79999999999"
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
-  description: Using a translation service as an example
-  title: Go Clean Template API
+  description: User CRUD
+  title: V1 API
   version: "1.0"
 paths:
-  /translation/do-translate:
-    post:
-      consumes:
-      - application/json
-      description: Translate a text
-      operationId: do-translate
-      parameters:
-      - description: Set up translation
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/v1.doTranslateRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entity.Translation'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/v1.response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/v1.response'
-      summary: Translate
-      tags:
-      - translation
-  /translation/history:
+  /users:
     get:
       consumes:
       - application/json
-      description: Show all translation history
-      operationId: history
+      description: Show all users
+      operationId: index
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/v1.historyResponse'
+            $ref: '#/definitions/v1.indexResponse'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/v1.response'
-      summary: Show history
+      summary: Show users
       tags:
-      - translation
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Create new user
+      operationId: create
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/v1.userResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      summary: Create new user
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Update exists user
+      operationId: update
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.userResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      summary: Update user
+      tags:
+      - users
+  /users/:id:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user from db
+      operationId: delete
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      summary: Delete user by id
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: Show user detail
+      operationId: show
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.userResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      summary: Show user by id
+      tags:
+      - users
 swagger: "2.0"

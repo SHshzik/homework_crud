@@ -1,18 +1,12 @@
 package http
 
 import (
-	//v1 "homework_crud/internal/controller/http/v1"
-	//"homework_crud/pkg/logger"
-	//"net/http"
 	//"github.com/ansrivas/fiberprometheus/v2"
-	//_ "github.com/evrone/go-clean-template/docs" // Swagger docs.
-	//v1 "github.com/evrone/go-clean-template/internal/controller/http/v1"
-	//"github.com/evrone/go-clean-template/internal/usecase"
-	//"github.com/evrone/go-clean-template/pkg/logger"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
 	"homework_crud/config"
+	_ "homework_crud/docs" // Swagger docs.
 	"homework_crud/internal/controller/http/middleware"
 	v1 "homework_crud/internal/controller/http/v1"
 	"homework_crud/internal/usecase"
@@ -38,11 +32,11 @@ func NewRouter(app *fiber.App, cfg *config.Config, l logger.Interface, t usecase
 	//	prometheus.RegisterAt(app, "/metrics")
 	//	app.Use(prometheus.Middleware)
 	//}
-	//
-	//// Swagger
-	//if cfg.Swagger.Enabled {
-	//	app.Get("/swagger/*", swagger.HandlerDefault)
-	//}
+
+	// Swagger
+	if cfg.Swagger.Enabled {
+		app.Get("/swagger/*", swagger.HandlerDefault)
+	}
 
 	// K8s probe
 	app.Get("/healthz", func(ctx *fiber.Ctx) error { return ctx.SendStatus(http.StatusOK) })
