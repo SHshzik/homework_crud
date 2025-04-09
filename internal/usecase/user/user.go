@@ -24,9 +24,12 @@ func (u *UseCase) ReadAll(ctx context.Context) ([]entity.User, error) {
 	return users, nil
 }
 
-func (u *UseCase) Create() {
-	//TODO implement me
-	panic("implement me")
+func (u *UseCase) Create(ctx context.Context, user *entity.User) error {
+	err := u.repo.Create(ctx, user)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (u *UseCase) Read(ctx context.Context, id int) (*entity.User, error) {

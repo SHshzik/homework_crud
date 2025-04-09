@@ -82,3 +82,21 @@ func (r UserRepo) Delete(ctx context.Context, id int) error {
 	}
 	return nil
 }
+
+func (r UserRepo) Create(ctx context.Context, user *entity.User) error {
+	sql, _, err := r.Builder.
+		Insert("users").
+		Columns("name", "email", "phone").
+		Values("$1", "$2", "$3").
+		Suffix("returning id").
+		ToSql()
+	if err != nil {
+		return fmt.Errorf("UserRepo - Create - r.Builder: %w", err)
+	}
+
+	err = r.Pool.QueryRow(ctx, sql, user.Name, user.Email, user.Phone).Scan(&user.Id)
+	if err != nil {
+		return fmt.Errorf("UserRepo - Create - r.Pool.Exec %w", err)
+	}
+	return nil
+}

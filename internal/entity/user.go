@@ -9,3 +9,11 @@ type User struct {
 	Email string `json:"email" example:"test@test.com"`
 	Phone string `json:"phone" example:"+79999999999"`
 }
+
+func NewUser(name, email, phone string) *User {
+	return &User{
+		Name:  name,
+		Email: email,
+		Phone: phone,
+	}
+}

@@ -25,6 +25,7 @@ func NewUserRoutes(apiV1Group fiber.Router, t usecase.User, l logger.Interface) 
 		translationGroup.Get("/", r.index)
 		translationGroup.Get("/:user_id", r.show)
 		translationGroup.Delete("/:user_id", r.delete)
+		translationGroup.Post("/", r.create)
 	}
 }
 
@@ -109,4 +110,46 @@ func (r *userRoutes) delete(ctx *fiber.Ctx) error {
 
 	ctx.Status(http.StatusNoContent)
 	return nil
+}
+
+type userForm struct {
+	Name  string `form:"name"  validate:"required"`
+	Email string `form:"email" validate:"required"`
+	Phone string `form:"phone" validate:"required"`
+}
+
+// @Summary     Create new user
+// @Description Create new user
+// @ID          create
+// @Tags  	    users
+// @Accept      json
+// @Produce     json
+// @Success     201 {object} userResponse
+// @Failure     500 {object} response
+// @Router      /users [post]
+func (r *userRoutes) create(ctx *fiber.Ctx) error {
+	formUser := userForm{}
+	err := ctx.BodyParser(&formUser)
+	if err != nil {
+		r.l.Error(err, "http - v1 - create")
+
+		return errorResponse(ctx, http.StatusUnprocessableEntity, "Bad user params")
+	}
+
+	err = r.v.Struct(formUser)
+	if err != nil {
+		r.l.Error(err, "http - v1 - create")
+
+		return errorResponse(ctx, http.StatusUnprocessableEntity, err.Error())
+	}
+
+	user := entity.NewUser(formUser.Name, formUser.Email, formUser.Phone)
+	err = r.t.Create(ctx.UserContext(), user)
+	if err != nil {
+		r.l.Error(err, "http - v1 - create")
+
+		return errorResponse(ctx, http.StatusUnprocessableEntity, "user not created")
+	}
+
+	return ctx.Status(http.StatusCreated).JSON(userResponse{user})
 }

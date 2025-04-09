@@ -13,5 +13,6 @@ type (
 		FetchAll(ctx context.Context) ([]entity.User, error)
 		Find(ctx context.Context, id int) (*entity.User, error)
 		Delete(ctx context.Context, id int) error
+		Create(ctx context.Context, user *entity.User) error
 	}
 )
