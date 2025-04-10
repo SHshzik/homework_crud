@@ -54,7 +54,7 @@ run: deps swag-v1 ### swag run for API v1
 .PHONY: run
 
 docker-rm-volume: ### remove docker volume
-	docker volume rm go-clean-template_pg-data
+	docker volume rm go-homework_crud_pg-data
 .PHONY: docker-rm-volume
 
 linter-golangci: ### check by golangci linter
