@@ -3,6 +3,7 @@ package persistent
 import (
 	"context"
 	"fmt"
+
 	"homework_crud/internal/entity"
 	"homework_crud/pkg/postgres"
 )
@@ -27,6 +28,7 @@ func (r UserRepo) FetchAll(ctx context.Context) ([]entity.User, error) {
 	if err != nil {
 		return nil, fmt.Errorf("UserRepo - FetchAll - r.Builder: %w", err)
 	}
+
 	rows, err := r.Pool.Query(ctx, sql)
 	if err != nil {
 		return nil, fmt.Errorf("UserRepo - FetchAll - r.Pool.Query: %w", err)
@@ -34,10 +36,11 @@ func (r UserRepo) FetchAll(ctx context.Context) ([]entity.User, error) {
 	defer rows.Close()
 
 	entities := make([]entity.User, 0, _defaultEntityCap)
+
 	for rows.Next() {
 		e := entity.User{}
 
-		err = rows.Scan(&e.Id, &e.Name, &e.Email, &e.Phone)
+		err = rows.Scan(&e.ID, &e.Name, &e.Email, &e.Phone)
 		if err != nil {
 			return nil, fmt.Errorf("UserRepo - FetchAll - rows.Scan: %w", err)
 		}
@@ -57,16 +60,19 @@ func (r UserRepo) Find(ctx context.Context, id int) (*entity.User, error) {
 	if err != nil {
 		return nil, fmt.Errorf("UserRepo - Find - r.Builder: %w", err)
 	}
+
 	user := &entity.User{}
-	err = r.Pool.QueryRow(ctx, sql, id).Scan(&user.Id, &user.Name, &user.Email, &user.Phone)
+
+	err = r.Pool.QueryRow(ctx, sql, id).Scan(&user.ID, &user.Name, &user.Email, &user.Phone)
 	if err != nil {
 		return nil, fmt.Errorf("UserRepo - Find - r.Pool.Query: %w", err)
 	}
+
 	return user, nil
 }
 
 func (r UserRepo) Delete(ctx context.Context, id int) error {
-	var deletedId string
+	var deletedID string
 
 	sql, _, err := r.Builder.
 		Delete("users").
@@ -76,10 +82,12 @@ func (r UserRepo) Delete(ctx context.Context, id int) error {
 	if err != nil {
 		return fmt.Errorf("UserRepo - Delete - r.Builder: %w", err)
 	}
-	err = r.Pool.QueryRow(ctx, sql, id).Scan(&deletedId)
+
+	err = r.Pool.QueryRow(ctx, sql, id).Scan(&deletedID)
 	if err != nil {
 		return fmt.Errorf("UserRepo - Delete - r.Pool.Exec %w", err)
 	}
+
 	return nil
 }
 
@@ -94,10 +102,11 @@ func (r UserRepo) Create(ctx context.Context, user *entity.User) error {
 		return fmt.Errorf("UserRepo - Create - r.Builder: %w", err)
 	}
 
-	err = r.Pool.QueryRow(ctx, sql, user.Name, user.Email, user.Phone).Scan(&user.Id)
+	err = r.Pool.QueryRow(ctx, sql, user.Name, user.Email, user.Phone).Scan(&user.ID)
 	if err != nil {
 		return fmt.Errorf("UserRepo - Create - r.Pool.Exec %w", err)
 	}
+
 	return nil
 }
 
@@ -114,9 +123,10 @@ func (r UserRepo) Update(ctx context.Context, user *entity.User) error {
 		return fmt.Errorf("UserRepo - Update - r.Builder: %w", err)
 	}
 
-	err = r.Pool.QueryRow(ctx, sql, user.Name, user.Email, user.Phone, user.Id).Scan(&user.Id)
+	err = r.Pool.QueryRow(ctx, sql, user.Name, user.Email, user.Phone, user.ID).Scan(&user.ID)
 	if err != nil {
 		return fmt.Errorf("UserRepo - Update - r.Pool.Exec %w", err)
 	}
+
 	return nil
 }

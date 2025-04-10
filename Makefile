@@ -23,10 +23,6 @@ compose-up-all: ### Run docker compose (with backend and reverse proxy)
 	$(BASE_STACK) up --build -d
 .PHONY: compose-up-all
 
-compose-up-integration-test: ### Run docker compose with integration test
-	$(INTEGRATION_TEST_STACK) up --build --abort-on-container-exit --exit-code-from integration-test
-.PHONY: compose-up-integration-test
-
 compose-down: ### Down docker compose
 	$(ALL_STACK) down --remove-orphans
 .PHONY: compose-down
@@ -68,19 +64,6 @@ linter-hadolint: ### check by hadolint linter
 linter-dotenv: ### check by dotenv linter
 	dotenv-linter
 .PHONY: linter-dotenv
-
-test: ### run test
-	go test -v -race -covermode atomic -coverprofile=coverage.txt ./internal/...
-.PHONY: test
-
-integration-test: ### run integration-test
-	go clean -testcache && go test -v ./integration-test/...
-.PHONY: integration-test
-
-mock: ### run mockgen
-	mockgen -source ./internal/repo/contracts.go -package usecase_test > ./internal/usecase/mocks_repo_test.go
-	mockgen -source ./internal/usecase/contracts.go -package usecase_test > ./internal/usecase/mocks_usecase_test.go
-.PHONY: mock
 
 migrate-create:  ### create new migration
 	migrate create -ext sql -dir migrations '$(word 2,$(MAKECMDGOALS))'

@@ -3,6 +3,10 @@ package app
 
 import (
 	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
+
 	"homework_crud/config"
 	v1 "homework_crud/internal/controller/http"
 	"homework_crud/internal/repo/persistent"
@@ -10,9 +14,6 @@ import (
 	"homework_crud/pkg/httpserver"
 	"homework_crud/pkg/logger"
 	"homework_crud/pkg/postgres"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 // Run creates objects via constructors.

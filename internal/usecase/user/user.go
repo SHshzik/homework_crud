@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+
 	"homework_crud/internal/entity"
 	"homework_crud/internal/repo"
 )
@@ -21,6 +22,7 @@ func (u *UseCase) ReadAll(ctx context.Context) ([]entity.User, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return users, nil
 }
 
@@ -29,6 +31,7 @@ func (u *UseCase) Create(ctx context.Context, user *entity.User) error {
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -37,23 +40,24 @@ func (u *UseCase) Read(ctx context.Context, id int) (*entity.User, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return user, nil
 }
 
 func (u *UseCase) Update(ctx context.Context, user *entity.User) error {
 	err := u.repo.Update(ctx, user)
-
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 
 func (u *UseCase) Delete(ctx context.Context, id int) error {
 	err := u.repo.Delete(ctx, id)
-
 	if err != nil {
 		return err
 	}
+
 	return nil
 }

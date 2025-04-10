@@ -1,14 +1,14 @@
 package v1
 
 import (
-	"homework_crud/internal/entity"
-	"homework_crud/internal/usecase"
-	"homework_crud/pkg/logger"
 	"net/http"
 	"strconv"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+	"homework_crud/internal/entity"
+	"homework_crud/internal/usecase"
+	"homework_crud/pkg/logger"
 )
 
 type userRoutes struct {
@@ -68,14 +68,14 @@ type userResponse struct {
 // @Failure     500 {object} response
 // @Router      /users/:id [get]
 func (r *userRoutes) show(ctx *fiber.Ctx) error {
-	userId, err := strconv.Atoi(ctx.Params("user_id"))
+	userID, err := strconv.Atoi(ctx.Params("user_id"))
 	if err != nil {
 		r.l.Error(err, "http - v1 - show")
 
 		return errorResponse(ctx, http.StatusUnprocessableEntity, "wrong user id")
 	}
 
-	user, err := r.t.Read(ctx.UserContext(), userId)
+	user, err := r.t.Read(ctx.UserContext(), userID)
 	if err != nil {
 		r.l.Error(err, "http - v1 - index")
 
@@ -95,14 +95,14 @@ func (r *userRoutes) show(ctx *fiber.Ctx) error {
 // @Failure     500 {object} response
 // @Router      /users/:id [delete]
 func (r *userRoutes) delete(ctx *fiber.Ctx) error {
-	userId, err := strconv.Atoi(ctx.Params("user_id"))
+	userID, err := strconv.Atoi(ctx.Params("user_id"))
 	if err != nil {
 		r.l.Error(err, "http - v1 - delete")
 
 		return errorResponse(ctx, http.StatusUnprocessableEntity, "wrong user id")
 	}
 
-	err = r.t.Delete(ctx.UserContext(), userId)
+	err = r.t.Delete(ctx.UserContext(), userID)
 	if err != nil {
 		r.l.Error(err, "http - v1 - delete")
 
@@ -110,6 +110,7 @@ func (r *userRoutes) delete(ctx *fiber.Ctx) error {
 	}
 
 	ctx.Status(http.StatusNoContent)
+
 	return nil
 }
 
@@ -130,6 +131,7 @@ type userForm struct {
 // @Router      /users [post]
 func (r *userRoutes) create(ctx *fiber.Ctx) error {
 	formUser := userForm{}
+
 	err := ctx.BodyParser(&formUser)
 	if err != nil {
 		r.l.Error(err, "http - v1 - create")
@@ -145,6 +147,7 @@ func (r *userRoutes) create(ctx *fiber.Ctx) error {
 	}
 
 	user := entity.NewUser(formUser.Name, formUser.Email, formUser.Phone)
+
 	err = r.t.Create(ctx.UserContext(), user)
 	if err != nil {
 		r.l.Error(err, "http - v1 - create")
@@ -165,7 +168,7 @@ func (r *userRoutes) create(ctx *fiber.Ctx) error {
 // @Failure     500 {object} response
 // @Router      /users [put]
 func (r *userRoutes) update(ctx *fiber.Ctx) error {
-	userId, err := strconv.Atoi(ctx.Params("user_id"))
+	userID, err := strconv.Atoi(ctx.Params("user_id"))
 	if err != nil {
 		r.l.Error(err, "http - v1 - delete")
 
@@ -173,6 +176,7 @@ func (r *userRoutes) update(ctx *fiber.Ctx) error {
 	}
 
 	formUser := userForm{}
+
 	err = ctx.BodyParser(&formUser)
 	if err != nil {
 		r.l.Error(err, "http - v1 - update")
@@ -188,7 +192,7 @@ func (r *userRoutes) update(ctx *fiber.Ctx) error {
 	}
 
 	user := entity.NewUser(formUser.Name, formUser.Email, formUser.Phone)
-	user.Id = userId
+	user.ID = userID
 
 	err = r.t.Update(ctx.UserContext(), user)
 	if err != nil {

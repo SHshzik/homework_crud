@@ -1,10 +1,11 @@
 package middleware
 
 import (
-	"github.com/gofiber/fiber/v2"
-	"homework_crud/pkg/logger"
 	"strconv"
 	"strings"
+
+	"github.com/gofiber/fiber/v2"
+	"homework_crud/pkg/logger"
 )
 
 func buildRequestMessage(ctx *fiber.Ctx) string {

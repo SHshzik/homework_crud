@@ -2,11 +2,12 @@ package middleware
 
 import (
 	"fmt"
+	"runtime/debug"
+	"strings"
+
 	"github.com/gofiber/fiber/v2"
 	fiberRecover "github.com/gofiber/fiber/v2/middleware/recover"
 	"homework_crud/pkg/logger"
-	"runtime/debug"
-	"strings"
 )
 
 func buildPanicMessage(ctx *fiber.Ctx, err interface{}) string {

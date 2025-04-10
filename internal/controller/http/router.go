@@ -1,7 +1,7 @@
 package http
 
 import (
-	//"github.com/ansrivas/fiberprometheus/v2"
+	"net/http"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
@@ -11,7 +11,6 @@ import (
 	v1 "homework_crud/internal/controller/http/v1"
 	"homework_crud/internal/usecase"
 	"homework_crud/pkg/logger"
-	"net/http"
 )
 
 // NewRouter -.
@@ -25,13 +24,6 @@ func NewRouter(app *fiber.App, cfg *config.Config, l logger.Interface, t usecase
 	// Options
 	app.Use(middleware.Logger(l))
 	app.Use(middleware.Recovery(l))
-
-	//// Prometheus metrics
-	//if cfg.Metrics.Enabled {
-	//	prometheus := fiberprometheus.New("my-service-name")
-	//	prometheus.RegisterAt(app, "/metrics")
-	//	app.Use(prometheus.Middleware)
-	//}
 
 	// Swagger
 	if cfg.Swagger.Enabled {
