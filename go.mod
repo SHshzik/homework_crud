@@ -1,4 +1,4 @@
-module homework_crud
+module github.com/SHshzik/homework_crud
 
 go 1.23
 

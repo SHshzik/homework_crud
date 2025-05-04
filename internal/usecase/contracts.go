@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 
-	"homework_crud/internal/entity"
+	"github.com/SHshzik/homework_crud/internal/entity"
 )
 
 //go:generate mockgen -source=interfaces.go -destination=./mocks_usecase_test.go -package=usecase_test

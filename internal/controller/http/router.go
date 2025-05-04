@@ -3,14 +3,14 @@ package http
 import (
 	"net/http"
 
+	"github.com/SHshzik/homework_crud/config"
+	_ "github.com/SHshzik/homework_crud/docs" // Swagger docs.
+	"github.com/SHshzik/homework_crud/internal/controller/http/middleware"
+	v1 "github.com/SHshzik/homework_crud/internal/controller/http/v1"
+	"github.com/SHshzik/homework_crud/internal/usecase"
+	"github.com/SHshzik/homework_crud/pkg/logger"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
-	"homework_crud/config"
-	_ "homework_crud/docs" // Swagger docs.
-	"homework_crud/internal/controller/http/middleware"
-	v1 "homework_crud/internal/controller/http/v1"
-	"homework_crud/internal/usecase"
-	"homework_crud/pkg/logger"
 )
 
 // NewRouter -.

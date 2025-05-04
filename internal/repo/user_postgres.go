@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 
-	"homework_crud/internal/entity"
-	"homework_crud/pkg/postgres"
+	"github.com/SHshzik/homework_crud/internal/entity"
+	"github.com/SHshzik/homework_crud/pkg/postgres"
 )
 
-const _defaultEntityCap = 64
+const defaultEntityCap = 64
 
 // UserRepo -.
 type UserRepo struct {
@@ -35,7 +35,7 @@ func (r UserRepo) FetchAll(ctx context.Context) ([]*entity.User, error) {
 	}
 	defer rows.Close()
 
-	entities := make([]*entity.User, 0, _defaultEntityCap)
+	entities := make([]*entity.User, 0, defaultEntityCap)
 
 	for rows.Next() {
 		e := &entity.User{}

@@ -19,7 +19,7 @@ x-backend-app-environment: &x-backend-app-environment
   APP_NAME: "homework_crud"
   APP_VERSION: "1.0.0"
   # HTTP settings
-  HTTP_PORT: "8080"
+  HTTP_PORT: "8081"
   HTTP_USE_PREFORK_MODE: "false"
   # Logger
   LOG_LEVEL: "debug"
@@ -75,7 +75,7 @@ services:
     environment:
       <<: *x-backend-app-environment
     ports:
-      - "8080:8080"
+      - "8081:8080"
     depends_on:
       - db
       - rabbitmq

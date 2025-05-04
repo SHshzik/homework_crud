@@ -4,8 +4,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/SHshzik/homework_crud/pkg/logger"
 	"github.com/gofiber/fiber/v2"
-	"homework_crud/pkg/logger"
 )
 
 func buildRequestMessage(ctx *fiber.Ctx) string {

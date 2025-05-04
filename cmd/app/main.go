@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"homework_crud/config"
-	"homework_crud/internal/app"
+	"github.com/SHshzik/homework_crud/config"
+	"github.com/SHshzik/homework_crud/internal/app"
 )
 
 func main() {

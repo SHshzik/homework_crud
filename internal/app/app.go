@@ -7,13 +7,13 @@ import (
 	"os/signal"
 	"syscall"
 
-	"homework_crud/config"
-	v1 "homework_crud/internal/controller/http"
-	"homework_crud/internal/repo"
-	"homework_crud/internal/usecase/user"
-	"homework_crud/pkg/httpserver"
-	"homework_crud/pkg/logger"
-	"homework_crud/pkg/postgres"
+	"github.com/SHshzik/homework_crud/config"
+	v1 "github.com/SHshzik/homework_crud/internal/controller/http"
+	"github.com/SHshzik/homework_crud/internal/repo"
+	"github.com/SHshzik/homework_crud/internal/usecase/user"
+	"github.com/SHshzik/homework_crud/pkg/httpserver"
+	"github.com/SHshzik/homework_crud/pkg/logger"
+	"github.com/SHshzik/homework_crud/pkg/postgres"
 )
 
 // Run creates objects via constructors.
