@@ -4,11 +4,12 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/go-playground/validator/v10"
-	"github.com/gofiber/fiber/v2"
 	"homework_crud/internal/entity"
 	"homework_crud/internal/usecase"
 	"homework_crud/pkg/logger"
+
+	"github.com/go-playground/validator/v10"
+	"github.com/gofiber/fiber/v2"
 )
 
 type userRoutes struct {
@@ -31,7 +32,7 @@ func NewUserRoutes(apiV1Group fiber.Router, t usecase.User, l logger.Interface) 
 }
 
 type indexResponse struct {
-	Users []entity.User `json:"users"`
+	Users []*entity.User `json:"users"`
 }
 
 // @Summary     Show users

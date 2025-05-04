@@ -11,7 +11,7 @@ import (
 type (
 	// User -.
 	User interface {
-		ReadAll(ctx context.Context) ([]entity.User, error)
+		ReadAll(ctx context.Context) ([]*entity.User, error)
 		Create(ctx context.Context, user *entity.User) error
 		Read(ctx context.Context, id int) (*entity.User, error)
 		Update(ctx context.Context, user *entity.User) error

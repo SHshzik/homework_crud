@@ -9,7 +9,7 @@ import (
 
 	"homework_crud/config"
 	v1 "homework_crud/internal/controller/http"
-	"homework_crud/internal/repo/persistent"
+	"homework_crud/internal/repo"
 	"homework_crud/internal/usecase/user"
 	"homework_crud/pkg/httpserver"
 	"homework_crud/pkg/logger"
@@ -28,7 +28,7 @@ func Run(cfg *config.Config) {
 	defer pg.Close()
 
 	// Use case
-	userUseCase := user.New(persistent.New(pg))
+	userUseCase := user.New(repo.New(pg))
 
 	// HTTP Server
 	httpServer := httpserver.New(httpserver.Port(cfg.HTTP.Port), httpserver.Prefork(cfg.HTTP.UsePreforkMode))

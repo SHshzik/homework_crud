@@ -9,15 +9,15 @@ import (
 
 // UseCase -.
 type UseCase struct {
-	repo repo.UserRepo
+	repo *repo.UserRepo
 }
 
 // New -.
-func New(r repo.UserRepo) *UseCase {
+func New(r *repo.UserRepo) *UseCase {
 	return &UseCase{repo: r}
 }
 
-func (u *UseCase) ReadAll(ctx context.Context) ([]entity.User, error) {
+func (u *UseCase) ReadAll(ctx context.Context) ([]*entity.User, error) {
 	users, err := u.repo.FetchAll(ctx)
 	if err != nil {
 		return nil, err

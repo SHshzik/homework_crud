@@ -1,4 +1,4 @@
-package persistent
+package repo
 
 import (
 	"context"
@@ -20,7 +20,7 @@ func New(pg *postgres.Postgres) *UserRepo {
 	return &UserRepo{pg}
 }
 
-func (r UserRepo) FetchAll(ctx context.Context) ([]entity.User, error) {
+func (r UserRepo) FetchAll(ctx context.Context) ([]*entity.User, error) {
 	sql, _, err := r.Builder.
 		Select("id, name, email, phone").
 		From("users").
@@ -35,10 +35,10 @@ func (r UserRepo) FetchAll(ctx context.Context) ([]entity.User, error) {
 	}
 	defer rows.Close()
 
-	entities := make([]entity.User, 0, _defaultEntityCap)
+	entities := make([]*entity.User, 0, _defaultEntityCap)
 
 	for rows.Next() {
-		e := entity.User{}
+		e := &entity.User{}
 
 		err = rows.Scan(&e.ID, &e.Name, &e.Email, &e.Phone)
 		if err != nil {
