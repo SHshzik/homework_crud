@@ -66,6 +66,16 @@ bin-deps: ### install tools
 psql:
 	docker-compose exec db psql -d db -U user
 
+evans:
+	~/evans/evans --proto ./api/proto/users.proto --port 8082 repl
+.PHONY: evans
+
+protoc:
+	protoc --go_out=pkg --go_opt=paths=source_relative \
+	--go-grpc_out=pkg --go-grpc_opt=paths=source_relative \
+	api/proto/users.proto
+.PHONY: protoc
+
 # compose-up-all: ### Run docker compose (with backend and reverse proxy)
 # 	$(BASE_STACK) up --build -d
 # .PHONY: compose-up-all

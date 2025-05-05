@@ -3,17 +3,22 @@ package app
 
 import (
 	"fmt"
+	"log"
+	"net"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/SHshzik/homework_crud/config"
+	usersServer "github.com/SHshzik/homework_crud/internal/controller/grpc"
 	v1 "github.com/SHshzik/homework_crud/internal/controller/http"
 	"github.com/SHshzik/homework_crud/internal/repo"
 	"github.com/SHshzik/homework_crud/internal/usecase/user"
+	usersService "github.com/SHshzik/homework_crud/pkg/api/proto"
 	"github.com/SHshzik/homework_crud/pkg/httpserver"
 	"github.com/SHshzik/homework_crud/pkg/logger"
 	"github.com/SHshzik/homework_crud/pkg/postgres"
+	"google.golang.org/grpc"
 )
 
 // Run creates objects via constructors.
@@ -36,6 +41,17 @@ func Run(cfg *config.Config) {
 
 	//// Start servers
 	httpServer.Start()
+
+	// GRPC Server
+	usersServer := usersServer.New(userUseCase)
+	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", 8082))
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+	var opts []grpc.ServerOption
+	grpcServer := grpc.NewServer(opts...)
+	usersService.RegisterUsersServiceServer(grpcServer, usersServer)
+	grpcServer.Serve(lis)
 
 	// Waiting signal
 	interrupt := make(chan os.Signal, 1)
