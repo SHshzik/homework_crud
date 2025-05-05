@@ -35,6 +35,16 @@ type indexResponse struct {
 	Users []*entity.User `json:"users"`
 }
 
+type userResponse struct {
+	*entity.User
+}
+
+type userForm struct {
+	Name  string `form:"name"  validate:"required"`
+	Email string `form:"email" validate:"required"`
+	Phone string `form:"phone" validate:"required"`
+}
+
 // @Summary     Show users
 // @Description Show all users
 // @ID          index
@@ -55,10 +65,6 @@ func (r *userRoutes) index(ctx *fiber.Ctx) error {
 	return ctx.Status(http.StatusOK).JSON(indexResponse{users})
 }
 
-type userResponse struct {
-	*entity.User
-}
-
 // @Summary     Show user by id
 // @Description Show user detail
 // @ID          show
@@ -66,6 +72,8 @@ type userResponse struct {
 // @Accept      json
 // @Produce     json
 // @Success     200 {object} userResponse
+// @Failure     422 {object} response
+// @Failure     404 {object} response
 // @Failure     500 {object} response
 // @Router      /users/:id [get]
 func (r *userRoutes) show(ctx *fiber.Ctx) error {
@@ -93,6 +101,8 @@ func (r *userRoutes) show(ctx *fiber.Ctx) error {
 // @Accept      json
 // @Produce     json
 // @Success     204
+// @Failure     422 {object} response
+// @Failure     404 {object} response
 // @Failure     500 {object} response
 // @Router      /users/:id [delete]
 func (r *userRoutes) delete(ctx *fiber.Ctx) error {
@@ -115,12 +125,6 @@ func (r *userRoutes) delete(ctx *fiber.Ctx) error {
 	return nil
 }
 
-type userForm struct {
-	Name  string `form:"name"  validate:"required"`
-	Email string `form:"email" validate:"required"`
-	Phone string `form:"phone" validate:"required"`
-}
-
 // @Summary     Create new user
 // @Description Create new user
 // @ID          create
@@ -128,6 +132,7 @@ type userForm struct {
 // @Accept      json
 // @Produce     json
 // @Success     201 {object} userResponse
+// @Failure     422 {object} response
 // @Failure     500 {object} response
 // @Router      /users [post]
 func (r *userRoutes) create(ctx *fiber.Ctx) error {
@@ -166,6 +171,7 @@ func (r *userRoutes) create(ctx *fiber.Ctx) error {
 // @Accept      json
 // @Produce     json
 // @Success     200 {object} userResponse
+// @Failure     422 {object} response
 // @Failure     500 {object} response
 // @Router      /users [put]
 func (r *userRoutes) update(ctx *fiber.Ctx) error {
