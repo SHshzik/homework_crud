@@ -33,6 +33,11 @@ deps: ### deps tidy + verify
 	go mod tidy && go mod verify
 .PHONY: deps
 
+run: deps swag-v1 ### swag run for API v1
+	go mod download && \
+	CGO_ENABLED=0 go run ./cmd/app
+.PHONY: run
+
 deps-audit: ### check dependencies vulnerabilities
 	govulncheck ./...
 .PHONY: deps-audit
@@ -42,10 +47,6 @@ format: ### Run code formatter
 	gci write . --skip-generated -s standard -s default
 .PHONY: format
 
-run: deps swag-v1 ### swag run for API v1
-	go mod download && \
-	CGO_ENABLED=0 go run -tags migrate ./cmd/app
-.PHONY: run
 
 docker-rm-volume: ### remove docker volume
 	docker volume rm go-homework_crud_pg-data

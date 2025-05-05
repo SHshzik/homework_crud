@@ -7,7 +7,6 @@ import (
 	"github.com/SHshzik/homework_crud/internal/entity"
 	"github.com/SHshzik/homework_crud/internal/usecase"
 	"github.com/SHshzik/homework_crud/pkg/logger"
-
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
