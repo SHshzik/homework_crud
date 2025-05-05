@@ -17,10 +17,6 @@ compose-up: ### Run docker compose (without backend and reverse proxy)
 	$(BASE_STACK) up --build -d db
 .PHONY: compose-up
 
-compose-up-all: ### Run docker compose (with backend and reverse proxy)
-	$(BASE_STACK) up --build -d
-.PHONY: compose-up-all
-
 compose-down: ### Down docker compose
 	$(BASE_STACK) down --remove-orphans
 .PHONY: compose-down
@@ -47,9 +43,8 @@ format: ### Run code formatter
 	gci write . --skip-generated -s standard -s default
 .PHONY: format
 
-
 docker-rm-volume: ### remove docker volume
-	docker volume rm go-homework_crud_pg-data
+	docker volume rm homework_crud_db_data
 .PHONY: docker-rm-volume
 
 linter-golangci: ### check by golangci linter
@@ -57,25 +52,20 @@ linter-golangci: ### check by golangci linter
 .PHONY: linter-golangci
 
 linter-hadolint: ### check by hadolint linter
-	git ls-files --exclude='Dockerfile*' --ignored | xargs hadolint
+	git ls-files --exclude='Dockerfile*' -i -o | xargs hadolint
 .PHONY: linter-hadolint
 
 linter-dotenv: ### check by dotenv linter
 	dotenv-linter
 .PHONY: linter-dotenv
 
-migrate-create:  ### create new migration
-	migrate create -ext sql -dir migrations '$(word 2,$(MAKECMDGOALS))'
-.PHONY: migrate-create
-
-migrate-up: ### migration up
-	migrate -path migrations -database '$(PG_URL)?sslmode=disable' up
-.PHONY: migrate-up
-
 bin-deps: ### install tools
-	GOBIN=$(LOCAL_BIN) go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
 	GOBIN=$(LOCAL_BIN) go install github.com/golang/mock/mockgen@latest
 .PHONY: bin-deps
 
 psql:
 	docker-compose exec db psql -d db -U user
+
+# compose-up-all: ### Run docker compose (with backend and reverse proxy)
+# 	$(BASE_STACK) up --build -d
+# .PHONY: compose-up-all
