@@ -2,33 +2,31 @@ package grpc
 
 import (
 	"context"
-	"strconv"
 
+	"github.com/SHshzik/homework_crud/internal/entity"
 	"github.com/SHshzik/homework_crud/internal/usecase"
 	usersService "github.com/SHshzik/homework_crud/pkg/api/proto"
 )
 
-type routeUserService struct {
+type RouteUserService struct {
 	usersService.UnimplementedUsersServiceServer
 	t usecase.User
 }
 
-func New(t usecase.User) *routeUserService {
-	return &routeUserService{t: t}
+func New(t usecase.User) *RouteUserService {
+	return &RouteUserService{t: t}
 }
 
-func (s *routeUserService) GetUsers(ctx context.Context, req *usersService.GetUsersRequest) (*usersService.GetUsersResponse, error) {
+func (s *RouteUserService) GetUsers(ctx context.Context, _ *usersService.GetUsersRequest) (*usersService.GetUsersResponse, error) {
 	users, err := s.t.ReadAll(ctx)
 	if err != nil {
-		// r.l.Error(err, "http - v1 - index")
-
 		return nil, err
 	}
 
 	usersProto := make([]*usersService.User, len(users))
 	for i, user := range users {
 		usersProto[i] = &usersService.User{
-			Id:    strconv.Itoa(user.ID),
+			Id:    int64(user.ID),
 			Name:  user.Name,
 			Email: user.Email,
 			Phone: user.Phone,
@@ -36,4 +34,68 @@ func (s *routeUserService) GetUsers(ctx context.Context, req *usersService.GetUs
 	}
 
 	return &usersService.GetUsersResponse{Users: usersProto}, nil
+}
+
+func (s *RouteUserService) GetUser(ctx context.Context, req *usersService.GetUserRequest) (*usersService.GetUserResponse, error) {
+	user, err := s.t.Read(ctx, int(req.Id))
+	if err != nil {
+		return nil, err
+	}
+
+	return &usersService.GetUserResponse{User: &usersService.User{
+		Id:    int64(user.ID),
+		Name:  user.Name,
+		Email: user.Email,
+		Phone: user.Phone,
+	}}, nil
+}
+
+func (s *RouteUserService) DeleteUser(ctx context.Context, req *usersService.DeleteUserRequest) (*usersService.DeleteUserResponse, error) {
+	err := s.t.Delete(ctx, int(req.Id))
+	if err != nil {
+		return nil, err
+	}
+
+	return &usersService.DeleteUserResponse{}, nil
+}
+
+func (s *RouteUserService) CreateUser(ctx context.Context, req *usersService.CreateUserRequest) (*usersService.CreateUserResponse, error) {
+	user := &entity.User{
+		Name:  req.Name,
+		Email: req.Email,
+		Phone: req.Phone,
+	}
+
+	err := s.t.Create(ctx, user)
+	if err != nil {
+		return nil, err
+	}
+
+	return &usersService.CreateUserResponse{User: &usersService.User{
+		Id:    int64(user.ID),
+		Name:  user.Name,
+		Email: user.Email,
+		Phone: user.Phone,
+	}}, nil
+}
+
+func (s *RouteUserService) UpdateUser(ctx context.Context, req *usersService.UpdateUserRequest) (*usersService.UpdateUserResponse, error) {
+	user := &entity.User{
+		ID:    int(req.Id),
+		Name:  req.Name,
+		Email: req.Email,
+		Phone: req.Phone,
+	}
+
+	err := s.t.Update(ctx, user)
+	if err != nil {
+		return nil, err
+	}
+
+	return &usersService.UpdateUserResponse{User: &usersService.User{
+		Id:    int64(user.ID),
+		Name:  user.Name,
+		Email: user.Email,
+		Phone: user.Phone,
+	}}, nil
 }

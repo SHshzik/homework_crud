@@ -3,7 +3,6 @@ package app
 
 import (
 	"fmt"
-	"log"
 	"net"
 	"os"
 	"os/signal"
@@ -44,14 +43,20 @@ func Run(cfg *config.Config) {
 
 	// GRPC Server
 	usersServer := usersServer.New(userUseCase)
-	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", 8082))
+
+	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", cfg.GRPC.PORT))
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		l.Fatal(fmt.Errorf("app - Run - net.Listen: %w", err))
 	}
+
 	var opts []grpc.ServerOption
 	grpcServer := grpc.NewServer(opts...)
 	usersService.RegisterUsersServiceServer(grpcServer, usersServer)
-	grpcServer.Serve(lis)
+
+	err = grpcServer.Serve(lis)
+	if err != nil {
+		l.Fatal(fmt.Errorf("app - Run - grpcServer.Serve: %w", err))
+	}
 
 	// Waiting signal
 	interrupt := make(chan os.Signal, 1)

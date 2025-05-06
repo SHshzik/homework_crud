@@ -16,6 +16,7 @@ type (
 		RMQ     RMQ
 		Metrics Metrics
 		Swagger Swagger
+		GRPC    GRPC
 	}
 
 	// App -.
@@ -54,6 +55,10 @@ type (
 
 	Swagger struct {
 		Enabled bool `env:"SWAGGER_ENABLED" envDefault:"false"`
+	}
+
+	GRPC struct {
+		PORT int `env:"GRPC_PORT,required"`
 	}
 )
 
