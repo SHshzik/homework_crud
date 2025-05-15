@@ -3,8 +3,8 @@ package user
 import (
 	"context"
 
-	"github.com/SHshzik/homework_crud/services/user-server/internal/entity"
-	"github.com/SHshzik/homework_crud/services/user-server/internal/repo"
+	"github.com/SHshzik/homework_crud/services/user-server/entity"
+	"github.com/SHshzik/homework_crud/services/user-server/repo"
 )
 
 // UseCase -.

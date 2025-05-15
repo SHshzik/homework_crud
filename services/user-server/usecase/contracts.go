@@ -3,11 +3,10 @@ package usecase
 import (
 	"context"
 
-	"github.com/SHshzik/homework_crud/services/user-server/internal/entity"
+	"github.com/SHshzik/homework_crud/services/user-server/entity"
 )
 
 //go:generate mockgen -source=interfaces.go -destination=./mocks_usecase_test.go -package=usecase_test
-
 type (
 	// User -.
 	User interface {

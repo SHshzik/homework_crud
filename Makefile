@@ -22,7 +22,7 @@ compose-down: ### Down docker compose
 .PHONY: compose-down
 
 swag-v1: ### swag init
-	swag init -g services/user-server/internal/controller/http/router.go
+	swag init -g services/user-server/controller/http/router.go
 .PHONY: swag-v1
 
 deps: ### deps tidy + verify
@@ -71,8 +71,8 @@ evans:
 .PHONY: evans
 
 user-service-protoc:
-	protoc --go_out=services/user-server/internal/controller/grpc --go_opt=paths=source_relative \
-	--go-grpc_out=services/user-server/internal/controller/grpc --go-grpc_opt=paths=source_relative \
+	protoc --go_out=services/user-server/controller/grpc --go_opt=paths=source_relative \
+	--go-grpc_out=services/user-server/controller/grpc --go-grpc_opt=paths=source_relative \
 	api/proto/users.proto
 .PHONY: protoc
 

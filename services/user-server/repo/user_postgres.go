@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/SHshzik/homework_crud/pkg/postgres"
-	"github.com/SHshzik/homework_crud/services/user-server/internal/entity"
+	"github.com/SHshzik/homework_crud/services/user-server/entity"
 )
 
 const defaultEntityCap = 64

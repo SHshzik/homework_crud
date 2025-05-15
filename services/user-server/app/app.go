@@ -12,11 +12,11 @@ import (
 	"github.com/SHshzik/homework_crud/pkg/logger"
 	"github.com/SHshzik/homework_crud/pkg/postgres"
 	"github.com/SHshzik/homework_crud/services/user-server/config"
-	usersServer "github.com/SHshzik/homework_crud/services/user-server/internal/controller/grpc"
-	usersService "github.com/SHshzik/homework_crud/services/user-server/internal/controller/grpc/api/proto"
-	v1 "github.com/SHshzik/homework_crud/services/user-server/internal/controller/http"
-	"github.com/SHshzik/homework_crud/services/user-server/internal/repo"
-	"github.com/SHshzik/homework_crud/services/user-server/internal/usecase/user"
+	usersServer "github.com/SHshzik/homework_crud/services/user-server/controller/grpc"
+	usersService "github.com/SHshzik/homework_crud/services/user-server/controller/grpc/api/proto"
+	v1 "github.com/SHshzik/homework_crud/services/user-server/controller/http"
+	"github.com/SHshzik/homework_crud/services/user-server/repo"
+	"github.com/SHshzik/homework_crud/services/user-server/usecase/user"
 	"google.golang.org/grpc"
 )
 
@@ -38,7 +38,7 @@ func Run(cfg *config.Config) {
 	httpServer := httpserver.New(httpserver.Port(cfg.HTTP.Port), httpserver.Prefork(cfg.HTTP.UsePreforkMode))
 	v1.NewRouter(httpServer.App, cfg, l, userUseCase)
 
-	//// Start servers
+	// Start servers
 	httpServer.Start()
 
 	// GRPC Server
