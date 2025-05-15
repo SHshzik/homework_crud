@@ -71,8 +71,8 @@ evans:
 .PHONY: evans
 
 protoc:
-	protoc --go_out=pkg --go_opt=paths=source_relative \
-	--go-grpc_out=pkg --go-grpc_opt=paths=source_relative \
+	protoc --go_out=internal/controller/grpc --go_opt=paths=source_relative \
+	--go-grpc_out=internal/controller/grpc --go-grpc_opt=paths=source_relative \
 	api/proto/users.proto
 .PHONY: protoc
 

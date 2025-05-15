@@ -10,10 +10,10 @@ import (
 
 	"github.com/SHshzik/homework_crud/config"
 	usersServer "github.com/SHshzik/homework_crud/internal/controller/grpc"
+	usersService "github.com/SHshzik/homework_crud/internal/controller/grpc/api/proto"
 	v1 "github.com/SHshzik/homework_crud/internal/controller/http"
 	"github.com/SHshzik/homework_crud/internal/repo"
 	"github.com/SHshzik/homework_crud/internal/usecase/user"
-	usersService "github.com/SHshzik/homework_crud/pkg/api/proto"
 	"github.com/SHshzik/homework_crud/pkg/httpserver"
 	"github.com/SHshzik/homework_crud/pkg/logger"
 	"github.com/SHshzik/homework_crud/pkg/postgres"
