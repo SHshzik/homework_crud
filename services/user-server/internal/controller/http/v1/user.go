@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/SHshzik/homework_crud/internal/entity"
-	"github.com/SHshzik/homework_crud/internal/usecase"
 	"github.com/SHshzik/homework_crud/pkg/logger"
+	"github.com/SHshzik/homework_crud/services/user-server/internal/entity"
+	"github.com/SHshzik/homework_crud/services/user-server/internal/usecase"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )

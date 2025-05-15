@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/SHshzik/homework_crud/internal/entity"
 	"github.com/SHshzik/homework_crud/pkg/postgres"
+	"github.com/SHshzik/homework_crud/services/user-server/internal/entity"
 )
 
 const defaultEntityCap = 64

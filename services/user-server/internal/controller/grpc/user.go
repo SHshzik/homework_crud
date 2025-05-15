@@ -3,9 +3,9 @@ package grpc
 import (
 	"context"
 
-	usersService "github.com/SHshzik/homework_crud/internal/controller/grpc/api/proto"
-	"github.com/SHshzik/homework_crud/internal/entity"
-	"github.com/SHshzik/homework_crud/internal/usecase"
+	usersService "github.com/SHshzik/homework_crud/services/user-server/internal/controller/grpc/api/proto"
+	"github.com/SHshzik/homework_crud/services/user-server/internal/entity"
+	"github.com/SHshzik/homework_crud/services/user-server/internal/usecase"
 )
 
 type RouteUserService struct {

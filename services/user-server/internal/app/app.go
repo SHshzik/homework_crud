@@ -8,15 +8,15 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/SHshzik/homework_crud/config"
-	usersServer "github.com/SHshzik/homework_crud/internal/controller/grpc"
-	usersService "github.com/SHshzik/homework_crud/internal/controller/grpc/api/proto"
-	v1 "github.com/SHshzik/homework_crud/internal/controller/http"
-	"github.com/SHshzik/homework_crud/internal/repo"
-	"github.com/SHshzik/homework_crud/internal/usecase/user"
 	"github.com/SHshzik/homework_crud/pkg/httpserver"
 	"github.com/SHshzik/homework_crud/pkg/logger"
 	"github.com/SHshzik/homework_crud/pkg/postgres"
+	"github.com/SHshzik/homework_crud/services/user-server/config"
+	usersServer "github.com/SHshzik/homework_crud/services/user-server/internal/controller/grpc"
+	usersService "github.com/SHshzik/homework_crud/services/user-server/internal/controller/grpc/api/proto"
+	v1 "github.com/SHshzik/homework_crud/services/user-server/internal/controller/http"
+	"github.com/SHshzik/homework_crud/services/user-server/internal/repo"
+	"github.com/SHshzik/homework_crud/services/user-server/internal/usecase/user"
 	"google.golang.org/grpc"
 )
 
