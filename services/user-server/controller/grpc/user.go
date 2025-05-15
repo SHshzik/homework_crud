@@ -3,7 +3,7 @@ package grpc
 import (
 	"context"
 
-	usersService "github.com/SHshzik/homework_crud/services/user-server/controller/grpc/api/proto"
+	usersService "github.com/SHshzik/homework_crud/api/proto"
 	"github.com/SHshzik/homework_crud/services/user-server/entity"
 	"github.com/SHshzik/homework_crud/services/user-server/usecase"
 )

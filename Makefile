@@ -34,6 +34,11 @@ user-service-run: deps swag-v1 ### swag run for API v1
 	CGO_ENABLED=0 go run ./services/user-server/cmd
 .PHONY: user-service-run
 
+user-client-run:
+	go mod download && \
+	CGO_ENABLED=0 go run ./services/user-client/cmd
+.PHONY: user-client-run
+
 deps-audit: ### check dependencies vulnerabilities
 	govulncheck ./...
 .PHONY: deps-audit
@@ -70,9 +75,9 @@ evans:
 	~/evans/evans --proto ./api/proto/users.proto --port 8082 repl
 .PHONY: evans
 
-user-service-protoc:
-	protoc --go_out=services/user-server/controller/grpc --go_opt=paths=source_relative \
-	--go-grpc_out=services/user-server/controller/grpc --go-grpc_opt=paths=source_relative \
+protoc:
+	protoc --go_out=. --go_opt=paths=source_relative \
+	--go-grpc_out=. --go-grpc_opt=paths=source_relative \
 	api/proto/users.proto
 .PHONY: protoc
 
