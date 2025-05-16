@@ -11,7 +11,7 @@ type (
 		Index() ([]*entity.User, error)
 		Create(name, email, phone string) (*entity.User, error)
 		Read(id int) (*entity.User, error)
-		// Update(user *entity.User) error
+		Update(id int, name, email, phone string) (*entity.User, error)
 		// Delete(id int) error
 	}
 )

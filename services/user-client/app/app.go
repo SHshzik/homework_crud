@@ -56,5 +56,11 @@ func Run(cfg *config.Config) {
 			log.Fatalf("fail to show: %v", err)
 		}
 		fmt.Printf("%#v\n", user.Name)
+	case "update":
+		user, err := userCase.Update(cfg.ID, cfg.Name, cfg.Email, cfg.Phone)
+		if err != nil {
+			log.Fatalf("fail to update: %v", err)
+		}
+		fmt.Printf("%#v\n", user.Name)
 	}
 }

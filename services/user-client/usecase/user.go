@@ -24,3 +24,14 @@ func (u *UserCase) Create(name, email, phone string) (*entity.User, error) {
 func (u *UserCase) Read(id int) (*entity.User, error) {
 	return u.Client.Read(id)
 }
+
+func (u *UserCase) Update(id int, name, email, phone string) (*entity.User, error) {
+	user := &entity.User{
+		ID:    id,
+		Name:  name,
+		Email: email,
+		Phone: phone,
+	}
+
+	return u.Client.Update(user)
+}

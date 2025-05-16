@@ -1,8 +1,8 @@
 {
     "client_type": "grpc",
-    "request_type": "index",
+    "request_type": "update",
     "id": 7,
-    "name": "John Doe",
-    "email": "john.doe@example.com",
-    "phone": "+1234567890"
+    "name": "John Doe1",
+    "email": "john.doe@example.com1",
+    "phone": "+12345678901"
 }

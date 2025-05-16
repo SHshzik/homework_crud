@@ -64,3 +64,22 @@ func (c *GrpcClient) Read(id int) (*entity.User, error) {
 		Email: getUserResponse.User.Email,
 	}, nil
 }
+
+func (c *GrpcClient) Update(user *entity.User) (*entity.User, error) {
+	updateUserResponse, err := c.UserServiceClient.UpdateUser(context.Background(), &usersPb.UpdateUserRequest{
+		Id:    int64(user.ID),
+		Name:  user.Name,
+		Email: user.Email,
+		Phone: user.Phone,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &entity.User{
+		ID:    int(updateUserResponse.User.Id),
+		Name:  updateUserResponse.User.Name,
+		Email: updateUserResponse.User.Email,
+		Phone: updateUserResponse.User.Phone,
+	}, nil
+}

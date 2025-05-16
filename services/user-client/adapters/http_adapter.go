@@ -19,3 +19,7 @@ func (c *HTTPClient) Create(name, email, phone string) (*entity.User, error) {
 func (c *HTTPClient) Read(id int) (*entity.User, error) {
 	return nil, nil
 }
+
+func (c *HTTPClient) Update(user *entity.User) (*entity.User, error) {
+	return nil, nil
+}
