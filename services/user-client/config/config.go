@@ -14,6 +14,7 @@ var configJSON []byte
 type Config struct {
 	ClientType  string `json:"client_type"`
 	RequestType string `json:"request_type"`
+	ID          int    `json:"id"`
 	GRPC        GRPC
 }
 

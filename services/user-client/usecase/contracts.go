@@ -10,7 +10,7 @@ type (
 	User interface {
 		Index() ([]*entity.User, error)
 		// Create(user *entity.User) error
-		// Read(id int) (*entity.User, error)
+		Read(id int) (*entity.User, error)
 		// Update(user *entity.User) error
 		// Delete(id int) error
 	}

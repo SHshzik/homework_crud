@@ -1,4 +1,5 @@
 {
     "client_type": "grpc",
-    "request_type": "index"
+    "request_type": "show",
+    "id": 7
 }

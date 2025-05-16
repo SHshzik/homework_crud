@@ -42,5 +42,11 @@ func Run(cfg *config.Config) {
 		for _, user := range users {
 			fmt.Printf("%#v\n", user.Name)
 		}
+	case "show":
+		user, err := userCase.Read(cfg.ID)
+		if err != nil {
+			log.Fatalf("fail to show: %v", err)
+		}
+		fmt.Printf("%#v\n", user.Name)
 	}
 }

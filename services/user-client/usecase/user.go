@@ -16,3 +16,7 @@ func New(client adapters.Client) *UserCase {
 func (u *UserCase) Index() ([]*entity.User, error) {
 	return u.Client.Index()
 }
+
+func (u *UserCase) Read(id int) (*entity.User, error) {
+	return u.Client.Read(id)
+}
