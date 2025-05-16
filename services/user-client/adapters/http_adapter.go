@@ -12,6 +12,10 @@ func (c *HTTPClient) Index() ([]*entity.User, error) {
 	return nil, nil
 }
 
+func (c *HTTPClient) Create(name, email, phone string) (*entity.User, error) {
+	return nil, nil
+}
+
 func (c *HTTPClient) Read(id int) (*entity.User, error) {
 	return nil, nil
 }

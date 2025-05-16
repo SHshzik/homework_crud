@@ -34,6 +34,24 @@ func (c *GrpcClient) Index() ([]*entity.User, error) {
 	return users, nil
 }
 
+func (c *GrpcClient) Create(name, email, phone string) (*entity.User, error) {
+	createUserResponse, err := c.UserServiceClient.CreateUser(context.Background(), &usersPb.CreateUserRequest{
+		Name:  name,
+		Email: email,
+		Phone: phone,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &entity.User{
+		ID:    int(createUserResponse.User.Id),
+		Name:  createUserResponse.User.Name,
+		Email: createUserResponse.User.Email,
+		Phone: createUserResponse.User.Phone,
+	}, nil
+}
+
 func (c *GrpcClient) Read(id int) (*entity.User, error) {
 	getUserResponse, err := c.UserServiceClient.GetUser(context.Background(), &usersPb.GetUserRequest{Id: int64(id)})
 	if err != nil {

@@ -14,8 +14,10 @@ import (
 
 func Run(cfg *config.Config) {
 	var client adapters.Client
-	var opts []grpc.DialOption
-	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
+
+	opts := []grpc.DialOption{
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	}
 
 	switch cfg.ClientType {
 	case "grpc":
@@ -42,6 +44,12 @@ func Run(cfg *config.Config) {
 		for _, user := range users {
 			fmt.Printf("%#v\n", user.Name)
 		}
+	case "create":
+		user, err := userCase.Create(cfg.Name, cfg.Email, cfg.Phone)
+		if err != nil {
+			log.Fatalf("fail to create: %v", err)
+		}
+		fmt.Printf("%#v\n", user.Name)
 	case "show":
 		user, err := userCase.Read(cfg.ID)
 		if err != nil {

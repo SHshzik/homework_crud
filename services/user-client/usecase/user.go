@@ -17,6 +17,10 @@ func (u *UserCase) Index() ([]*entity.User, error) {
 	return u.Client.Index()
 }
 
+func (u *UserCase) Create(name, email, phone string) (*entity.User, error) {
+	return u.Client.Create(name, email, phone)
+}
+
 func (u *UserCase) Read(id int) (*entity.User, error) {
 	return u.Client.Read(id)
 }

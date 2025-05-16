@@ -15,6 +15,9 @@ type Config struct {
 	ClientType  string `json:"client_type"`
 	RequestType string `json:"request_type"`
 	ID          int    `json:"id"`
+	Name        string `json:"name"`
+	Email       string `json:"email"`
+	Phone       string `json:"phone"`
 	GRPC        GRPC
 }
 
