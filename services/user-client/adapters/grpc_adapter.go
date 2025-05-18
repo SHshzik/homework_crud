@@ -4,7 +4,7 @@ import (
 	"context"
 
 	usersPb "github.com/SHshzik/homework_crud/api/proto"
-	"github.com/SHshzik/homework_crud/services/user-server/entity"
+	"github.com/SHshzik/homework_crud/services/user-client/entity"
 )
 
 type GrpcClient struct {
@@ -34,11 +34,10 @@ func (c *GrpcClient) Index() ([]*entity.User, error) {
 	return users, nil
 }
 
-func (c *GrpcClient) Create(name, email, phone string) (*entity.User, error) {
+func (c *GrpcClient) Create(name, email string) (*entity.User, error) {
 	createUserResponse, err := c.UserServiceClient.CreateUser(context.Background(), &usersPb.CreateUserRequest{
 		Name:  name,
 		Email: email,
-		Phone: phone,
 	})
 	if err != nil {
 		return nil, err
@@ -48,7 +47,6 @@ func (c *GrpcClient) Create(name, email, phone string) (*entity.User, error) {
 		ID:    int(createUserResponse.User.Id),
 		Name:  createUserResponse.User.Name,
 		Email: createUserResponse.User.Email,
-		Phone: createUserResponse.User.Phone,
 	}, nil
 }
 
@@ -70,7 +68,6 @@ func (c *GrpcClient) Update(user *entity.User) (*entity.User, error) {
 		Id:    int64(user.ID),
 		Name:  user.Name,
 		Email: user.Email,
-		Phone: user.Phone,
 	})
 	if err != nil {
 		return nil, err
@@ -80,7 +77,6 @@ func (c *GrpcClient) Update(user *entity.User) (*entity.User, error) {
 		ID:    int(updateUserResponse.User.Id),
 		Name:  updateUserResponse.User.Name,
 		Email: updateUserResponse.User.Email,
-		Phone: updateUserResponse.User.Phone,
 	}, nil
 }
 

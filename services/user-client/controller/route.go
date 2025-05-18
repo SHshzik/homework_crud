@@ -43,7 +43,7 @@ func (r *Route) Index() {
 }
 
 func (r *Route) Create() {
-	user, err := r.userCase.Create(r.cfg.Name, r.cfg.Email, r.cfg.Phone)
+	user, err := r.userCase.Create(r.cfg.Name, r.cfg.Email)
 	if err != nil {
 		r.l.Fatal("fail to create: %v", err)
 	}
@@ -61,7 +61,7 @@ func (r *Route) Show() {
 }
 
 func (r *Route) Update() {
-	user, err := r.userCase.Update(r.cfg.ID, r.cfg.Name, r.cfg.Email, r.cfg.Phone)
+	user, err := r.userCase.Update(r.cfg.ID, r.cfg.Name, r.cfg.Email)
 	if err != nil {
 		r.l.Fatal("fail to update: %v", err)
 	}

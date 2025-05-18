@@ -3,6 +3,5 @@
     "request_type": "index",
     "id": 14,
     "name": "Http Create update",
-    "email": "john.doe@example.com1",
-    "phone": "+12345678901"
+    "email": "john.doe@example.com1"
 }

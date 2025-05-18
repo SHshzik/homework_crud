@@ -11,7 +11,7 @@ import (
 
 	"github.com/SHshzik/homework_crud/pkg/logger"
 	"github.com/SHshzik/homework_crud/services/user-client/config"
-	"github.com/SHshzik/homework_crud/services/user-server/entity"
+	"github.com/SHshzik/homework_crud/services/user-client/entity"
 )
 
 var ErrServerError = errors.New("server error")
@@ -73,10 +73,10 @@ func (c *HTTPClient) Index() ([]*entity.User, error) {
 	return usersIndex.Users, nil
 }
 
-func (c *HTTPClient) Create(name, email, phone string) (*entity.User, error) {
+func (c *HTTPClient) Create(name, email string) (*entity.User, error) {
 	urlStr := fmt.Sprintf("http://localhost:%d/v1/users", c.cfg.PORT)
 
-	data, err := json.Marshal(entity.User{Name: name, Email: email, Phone: phone})
+	data, err := json.Marshal(entity.User{Name: name, Email: email})
 	if err != nil {
 		c.l.Error("fail to marshal user: %v", err)
 

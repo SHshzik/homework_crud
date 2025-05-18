@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"github.com/SHshzik/homework_crud/services/user-client/adapters"
-	"github.com/SHshzik/homework_crud/services/user-server/entity"
+	"github.com/SHshzik/homework_crud/services/user-client/entity"
 )
 
 type UserCase struct {
@@ -17,20 +17,19 @@ func (u *UserCase) Index() ([]*entity.User, error) {
 	return u.Client.Index()
 }
 
-func (u *UserCase) Create(name, email, phone string) (*entity.User, error) {
-	return u.Client.Create(name, email, phone)
+func (u *UserCase) Create(name, email string) (*entity.User, error) {
+	return u.Client.Create(name, email)
 }
 
 func (u *UserCase) Read(id int) (*entity.User, error) {
 	return u.Client.Read(id)
 }
 
-func (u *UserCase) Update(id int, name, email, phone string) (*entity.User, error) {
+func (u *UserCase) Update(id int, name, email string) (*entity.User, error) {
 	user := &entity.User{
 		ID:    id,
 		Name:  name,
 		Email: email,
-		Phone: phone,
 	}
 
 	return u.Client.Update(user)
