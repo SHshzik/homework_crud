@@ -4,8 +4,8 @@ import (
 	"context"
 
 	usersService "github.com/SHshzik/homework_crud/api/proto"
-	"github.com/SHshzik/homework_crud/services/user-server/entity"
-	"github.com/SHshzik/homework_crud/services/user-server/usecase"
+	"github.com/SHshzik/homework_crud/services/user-server/internal/entity"
+	"github.com/SHshzik/homework_crud/services/user-server/internal/usecase"
 )
 
 type RouteUserService struct {

@@ -1,6 +1,6 @@
 package adapters
 
-import "github.com/SHshzik/homework_crud/services/user-client/entity"
+import "github.com/SHshzik/homework_crud/services/user-client/internal/entity"
 
 type Client interface {
 	Index() ([]*entity.User, error)

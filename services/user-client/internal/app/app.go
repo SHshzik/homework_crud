@@ -5,10 +5,10 @@ import (
 
 	usersPb "github.com/SHshzik/homework_crud/api/proto"
 	"github.com/SHshzik/homework_crud/pkg/logger"
-	"github.com/SHshzik/homework_crud/services/user-client/adapters"
 	"github.com/SHshzik/homework_crud/services/user-client/config"
-	"github.com/SHshzik/homework_crud/services/user-client/controller"
-	"github.com/SHshzik/homework_crud/services/user-client/usecase"
+	"github.com/SHshzik/homework_crud/services/user-client/internal/adapters"
+	"github.com/SHshzik/homework_crud/services/user-client/internal/controller"
+	"github.com/SHshzik/homework_crud/services/user-client/internal/usecase"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )

@@ -11,7 +11,7 @@ import (
 
 	"github.com/SHshzik/homework_crud/pkg/logger"
 	"github.com/SHshzik/homework_crud/services/user-client/config"
-	"github.com/SHshzik/homework_crud/services/user-client/entity"
+	"github.com/SHshzik/homework_crud/services/user-client/internal/entity"
 )
 
 var ErrServerError = errors.New("server error")

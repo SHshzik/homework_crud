@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"github.com/SHshzik/homework_crud/services/user-client/entity"
+	"github.com/SHshzik/homework_crud/services/user-client/internal/entity"
 )
 
 //go:generate mockgen -source=interfaces.go -destination=./mocks_usecase_test.go -package=usecase_test

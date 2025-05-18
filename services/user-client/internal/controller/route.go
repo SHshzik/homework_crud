@@ -3,7 +3,7 @@ package controller
 import (
 	"github.com/SHshzik/homework_crud/pkg/logger"
 	"github.com/SHshzik/homework_crud/services/user-client/config"
-	"github.com/SHshzik/homework_crud/services/user-client/usecase"
+	"github.com/SHshzik/homework_crud/services/user-client/internal/usecase"
 )
 
 type Route struct {

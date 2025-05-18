@@ -6,9 +6,9 @@ import (
 	_ "github.com/SHshzik/homework_crud/docs" // Swagger docs.
 	"github.com/SHshzik/homework_crud/pkg/logger"
 	"github.com/SHshzik/homework_crud/services/user-server/config"
-	"github.com/SHshzik/homework_crud/services/user-server/controller/http/middleware"
-	v1 "github.com/SHshzik/homework_crud/services/user-server/controller/http/v1"
-	"github.com/SHshzik/homework_crud/services/user-server/usecase"
+	"github.com/SHshzik/homework_crud/services/user-server/internal/controller/http/middleware"
+	v1 "github.com/SHshzik/homework_crud/services/user-server/internal/controller/http/v1"
+	"github.com/SHshzik/homework_crud/services/user-server/internal/usecase"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
 )

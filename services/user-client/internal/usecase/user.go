@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"github.com/SHshzik/homework_crud/services/user-client/adapters"
-	"github.com/SHshzik/homework_crud/services/user-client/entity"
+	"github.com/SHshzik/homework_crud/services/user-client/internal/adapters"
+	"github.com/SHshzik/homework_crud/services/user-client/internal/entity"
 )
 
 type UserCase struct {

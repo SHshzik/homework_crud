@@ -4,7 +4,7 @@ import (
 	"context"
 
 	usersPb "github.com/SHshzik/homework_crud/api/proto"
-	"github.com/SHshzik/homework_crud/services/user-client/entity"
+	"github.com/SHshzik/homework_crud/services/user-client/internal/entity"
 )
 
 type GrpcClient struct {
