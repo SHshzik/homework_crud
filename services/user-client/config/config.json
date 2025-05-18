@@ -1,8 +1,8 @@
 {
     "client_type": "http",
-    "request_type": "show",
+    "request_type": "update",
     "id": 15,
-    "name": "Http Create",
+    "name": "Http Create update",
     "email": "john.doe@example.com1",
     "phone": "+12345678901"
 }

@@ -124,5 +124,50 @@ func (c *HTTPClient) Read(id int) (*entity.User, error) {
 }
 
 func (c *HTTPClient) Update(user *entity.User) (*entity.User, error) {
-	return nil, nil
+	url := fmt.Sprintf("http://localhost:%d/v1/users/%d", c.cfg.PORT, user.ID)
+
+	data, err := json.Marshal(user)
+	if err != nil {
+		c.l.Error("fail to marshal user: %v", err)
+
+		return nil, err
+	}
+
+	client := &http.Client{}
+
+	request, err := http.NewRequest(http.MethodPut, url, bytes.NewBuffer(data))
+	if err != nil {
+		c.l.Error("fail to create request: %v", err)
+
+		return nil, err
+	}
+
+	request.Header.Set("Content-Type", "application/json")
+
+	resp, err := client.Do(request)
+	if err != nil {
+		c.l.Error("fail to do request: %v", err)
+
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	c.l.Info("body: %v", string(body))
+	if err != nil {
+		c.l.Error("fail to read body: %v", err)
+
+		return nil, err
+	}
+
+	var updatedUser entity.User
+
+	err = json.Unmarshal(body, &updatedUser)
+	if err != nil {
+		c.l.Error("fail to unmarshal user: %v", err)
+
+		return nil, err
+	}
+
+	return &updatedUser, nil
 }
