@@ -112,6 +112,6 @@ issues:
       linters:
         - paralleltest
         - godot
-    - path: internal/controller/http
+    - path: services/user-server/controller/http
       linters:
         - godot

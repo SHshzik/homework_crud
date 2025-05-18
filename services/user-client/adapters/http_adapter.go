@@ -2,7 +2,9 @@ package adapters
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -12,13 +14,16 @@ import (
 	"github.com/SHshzik/homework_crud/services/user-server/entity"
 )
 
+var ErrServerError = errors.New("server error")
+
 type HTTPClient struct {
-	cfg *config.HTTP
-	l   logger.Interface
+	cfg    *config.HTTP
+	l      logger.Interface
+	client *http.Client
 }
 
 func NewHTTPClient(cfg *config.HTTP, l logger.Interface) *HTTPClient {
-	return &HTTPClient{cfg: cfg, l: l}
+	return &HTTPClient{cfg: cfg, l: l, client: &http.Client{}}
 }
 
 type usersIndex struct {
@@ -26,16 +31,28 @@ type usersIndex struct {
 }
 
 func (c *HTTPClient) Index() ([]*entity.User, error) {
-	url := fmt.Sprintf("http://localhost:%d/v1/users", c.cfg.PORT)
+	urlStr := fmt.Sprintf("http://localhost:%d/v1/users", c.cfg.PORT)
 
-	// TODO: add check 5xx errors
-	resp, err := http.Get(url)
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, urlStr, http.NoBody)
+	if err != nil {
+		c.l.Error("fail to create request: %v", err)
+
+		return nil, err
+	}
+
+	resp, err := c.client.Do(req)
 	if err != nil {
 		c.l.Error("fail to get users: %v", err)
 
 		return nil, err
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode >= http.StatusInternalServerError {
+		c.l.Error("server error: %d", resp.StatusCode)
+
+		return nil, fmt.Errorf("%w: %d", ErrServerError, resp.StatusCode)
+	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
@@ -57,7 +74,8 @@ func (c *HTTPClient) Index() ([]*entity.User, error) {
 }
 
 func (c *HTTPClient) Create(name, email, phone string) (*entity.User, error) {
-	url := fmt.Sprintf("http://localhost:%d/v1/users", c.cfg.PORT)
+	urlStr := fmt.Sprintf("http://localhost:%d/v1/users", c.cfg.PORT)
+
 	data, err := json.Marshal(entity.User{Name: name, Email: email, Phone: phone})
 	if err != nil {
 		c.l.Error("fail to marshal user: %v", err)
@@ -65,7 +83,16 @@ func (c *HTTPClient) Create(name, email, phone string) (*entity.User, error) {
 		return nil, err
 	}
 
-	resp, err := http.Post(url, "application/json", bytes.NewBuffer(data))
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodPost, urlStr, bytes.NewBuffer(data))
+	if err != nil {
+		c.l.Error("fail to create request: %v", err)
+
+		return nil, err
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := c.client.Do(req)
 	if err != nil {
 		c.l.Error("fail to create user: %v", err)
 
@@ -94,9 +121,16 @@ func (c *HTTPClient) Create(name, email, phone string) (*entity.User, error) {
 }
 
 func (c *HTTPClient) Read(id int) (*entity.User, error) {
-	url := fmt.Sprintf("http://localhost:%d/v1/users/%d", c.cfg.PORT, id)
+	urlStr := fmt.Sprintf("http://localhost:%d/v1/users/%d", c.cfg.PORT, id)
 
-	resp, err := http.Get(url)
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, urlStr, http.NoBody)
+	if err != nil {
+		c.l.Error("fail to create request: %v", err)
+
+		return nil, err
+	}
+
+	resp, err := c.client.Do(req)
 	if err != nil {
 		c.l.Error("fail to get user: %v", err)
 
@@ -133,18 +167,16 @@ func (c *HTTPClient) Update(user *entity.User) (*entity.User, error) {
 		return nil, err
 	}
 
-	client := &http.Client{}
-
-	request, err := http.NewRequest(http.MethodPut, url, bytes.NewBuffer(data))
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodPut, url, bytes.NewBuffer(data))
 	if err != nil {
 		c.l.Error("fail to create request: %v", err)
 
 		return nil, err
 	}
 
-	request.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Content-Type", "application/json")
 
-	resp, err := client.Do(request)
+	resp, err := c.client.Do(req)
 	if err != nil {
 		c.l.Error("fail to do request: %v", err)
 
@@ -153,7 +185,6 @@ func (c *HTTPClient) Update(user *entity.User) (*entity.User, error) {
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
-	c.l.Info("body: %v", string(body))
 	if err != nil {
 		c.l.Error("fail to read body: %v", err)
 
@@ -175,16 +206,14 @@ func (c *HTTPClient) Update(user *entity.User) (*entity.User, error) {
 func (c *HTTPClient) Delete(id int) error {
 	url := fmt.Sprintf("http://localhost:%d/v1/users/%d", c.cfg.PORT, id)
 
-	client := &http.Client{}
-
-	req, err := http.NewRequest(http.MethodDelete, url, nil)
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodDelete, url, http.NoBody)
 	if err != nil {
 		c.l.Error("fail to create request: %v", err)
 
 		return err
 	}
 
-	resp, err := client.Do(req)
+	resp, err := c.client.Do(req)
 	if err != nil {
 		c.l.Error("fail to delete user: %v", err)
 

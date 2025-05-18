@@ -1,9 +1,6 @@
 package controller
 
 import (
-	"fmt"
-	"log"
-
 	"github.com/SHshzik/homework_crud/pkg/logger"
 	"github.com/SHshzik/homework_crud/services/user-client/config"
 	"github.com/SHshzik/homework_crud/services/user-client/usecase"
@@ -22,37 +19,61 @@ func NewRoute(l logger.Interface, userCase usecase.User, cfg *config.Config) *Ro
 func (r *Route) Run() {
 	switch r.cfg.RequestType {
 	case "index":
-		users, err := r.userCase.Index()
-		if err != nil {
-			log.Fatalf("fail to index: %v", err)
-		}
-
-		for _, user := range users {
-			fmt.Printf("%#v\n", user.Name)
-		}
+		r.Index()
 	case "create":
-		user, err := r.userCase.Create(r.cfg.Name, r.cfg.Email, r.cfg.Phone)
-		if err != nil {
-			log.Fatalf("fail to create: %v", err)
-		}
-		fmt.Printf("%#v\n", user.Name)
+		r.Create()
 	case "show":
-		user, err := r.userCase.Read(r.cfg.ID)
-		if err != nil {
-			log.Fatalf("fail to show: %v", err)
-		}
-		fmt.Printf("%#v\n", user.Name)
+		r.Show()
 	case "update":
-		user, err := r.userCase.Update(r.cfg.ID, r.cfg.Name, r.cfg.Email, r.cfg.Phone)
-		if err != nil {
-			log.Fatalf("fail to update: %v", err)
-		}
-		fmt.Printf("%#v\n", user.Name)
+		r.Update()
 	case "delete":
-		err := r.userCase.Delete(r.cfg.ID)
-		if err != nil {
-			log.Fatalf("fail to delete: %v", err)
-		}
-		fmt.Println("deleted")
+		r.Delete()
 	}
+}
+
+func (r *Route) Index() {
+	users, err := r.userCase.Index()
+	if err != nil {
+		r.l.Fatal("fail to index: %v", err)
+	}
+
+	for _, user := range users {
+		r.l.Info("%#v", user)
+	}
+}
+
+func (r *Route) Create() {
+	user, err := r.userCase.Create(r.cfg.Name, r.cfg.Email, r.cfg.Phone)
+	if err != nil {
+		r.l.Fatal("fail to create: %v", err)
+	}
+
+	r.l.Info("%#v", user.Name)
+}
+
+func (r *Route) Show() {
+	user, err := r.userCase.Read(r.cfg.ID)
+	if err != nil {
+		r.l.Fatal("fail to show: %v", err)
+	}
+
+	r.l.Info("%#v", user.Name)
+}
+
+func (r *Route) Update() {
+	user, err := r.userCase.Update(r.cfg.ID, r.cfg.Name, r.cfg.Email, r.cfg.Phone)
+	if err != nil {
+		r.l.Fatal("fail to update: %v", err)
+	}
+
+	r.l.Info("%#v", user.Name)
+}
+
+func (r *Route) Delete() {
+	err := r.userCase.Delete(r.cfg.ID)
+	if err != nil {
+		r.l.Fatal("fail to delete: %v", err)
+	}
+
+	r.l.Info("deleted")
 }

@@ -29,6 +29,7 @@ func Run(cfg *config.Config) {
 			l.Fatal("fail to dial: %v", err)
 		}
 		defer conn.Close()
+
 		userServiceClient := usersPb.NewUsersServiceClient(conn)
 
 		client = adapters.NewGRPCClient(userServiceClient)
