@@ -12,6 +12,6 @@ type (
 		Create(name, email, phone string) (*entity.User, error)
 		Read(id int) (*entity.User, error)
 		Update(id int, name, email, phone string) (*entity.User, error)
-		// Delete(id int) error
+		Delete(id int) error
 	}
 )

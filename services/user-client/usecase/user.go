@@ -35,3 +35,7 @@ func (u *UserCase) Update(id int, name, email, phone string) (*entity.User, erro
 
 	return u.Client.Update(user)
 }
+
+func (u *UserCase) Delete(id int) error {
+	return u.Client.Delete(id)
+}

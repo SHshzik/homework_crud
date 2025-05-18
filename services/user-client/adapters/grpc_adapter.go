@@ -83,3 +83,12 @@ func (c *GrpcClient) Update(user *entity.User) (*entity.User, error) {
 		Phone: updateUserResponse.User.Phone,
 	}, nil
 }
+
+func (c *GrpcClient) Delete(id int) error {
+	_, err := c.UserServiceClient.DeleteUser(context.Background(), &usersPb.DeleteUserRequest{Id: int64(id)})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

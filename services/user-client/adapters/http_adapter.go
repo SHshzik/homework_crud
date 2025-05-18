@@ -171,3 +171,26 @@ func (c *HTTPClient) Update(user *entity.User) (*entity.User, error) {
 
 	return &updatedUser, nil
 }
+
+func (c *HTTPClient) Delete(id int) error {
+	url := fmt.Sprintf("http://localhost:%d/v1/users/%d", c.cfg.PORT, id)
+
+	client := &http.Client{}
+
+	req, err := http.NewRequest(http.MethodDelete, url, nil)
+	if err != nil {
+		c.l.Error("fail to create request: %v", err)
+
+		return err
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		c.l.Error("fail to delete user: %v", err)
+
+		return err
+	}
+	defer resp.Body.Close()
+
+	return nil
+}

@@ -48,5 +48,11 @@ func (r *Route) Run() {
 			log.Fatalf("fail to update: %v", err)
 		}
 		fmt.Printf("%#v\n", user.Name)
+	case "delete":
+		err := r.userCase.Delete(r.cfg.ID)
+		if err != nil {
+			log.Fatalf("fail to delete: %v", err)
+		}
+		fmt.Println("deleted")
 	}
 }
