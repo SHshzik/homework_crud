@@ -94,7 +94,33 @@ func (c *HTTPClient) Create(name, email, phone string) (*entity.User, error) {
 }
 
 func (c *HTTPClient) Read(id int) (*entity.User, error) {
-	return nil, nil
+	url := fmt.Sprintf("http://localhost:%d/v1/users/%d", c.cfg.PORT, id)
+
+	resp, err := http.Get(url)
+	if err != nil {
+		c.l.Error("fail to get user: %v", err)
+
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		c.l.Error("fail to read body: %v", err)
+
+		return nil, err
+	}
+
+	var user entity.User
+
+	err = json.Unmarshal(body, &user)
+	if err != nil {
+		c.l.Error("fail to unmarshal user: %v", err)
+
+		return nil, err
+	}
+
+	return &user, nil
 }
 
 func (c *HTTPClient) Update(user *entity.User) (*entity.User, error) {
