@@ -1,8 +1,8 @@
 {
     "client_type": "http",
-    "request_type": "index",
+    "request_type": "create",
     "id": 7,
-    "name": "John Doe1",
+    "name": "Http Create",
     "email": "john.doe@example.com1",
     "phone": "+12345678901"
 }
