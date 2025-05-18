@@ -19,10 +19,20 @@ type Config struct {
 	Email       string `json:"email"`
 	Phone       string `json:"phone"`
 	GRPC        GRPC
+	HTTP        HTTP
+	Logger      Logger
 }
 
 type GRPC struct {
 	PORT int `env:"GRPC_PORT,required"`
+}
+
+type HTTP struct {
+	PORT int `env:"HTTP_PORT,required"`
+}
+
+type Logger struct {
+	Level string `env:"LOG_LEVEL,required"`
 }
 
 func NewConfig() (*Config, error) {
